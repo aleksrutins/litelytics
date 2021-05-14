@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken';
 import CryptoJS from 'crypto-js';
 import * as db from './db/index.js';
 
-export function generateAccessToken(userid, username) {
+export function generateAccessToken(userid, email) {
     return jwt.sign({
         id: userid,
-        username
+        email
     }, process.env.TOKEN_SECRET, {expiresIn: "30m"});
 }
 
@@ -27,15 +27,16 @@ export function checkToken(req, res, next) {
 }
 
 export async function signIn(req, res) {
-    const password = req.body.password, email = req.body.email;
-    const siteDb = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-    if(!(CryptoJS.SHA256(password).toString() == siteDb.rows[0].password)) {
+    const password = req.body.password, email = req.params.email;
+    const userDb = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    if(!(CryptoJS.SHA256(password).toString() == userDb.rows[0].password)) {
         res.respondText(403, 'Incorrect password');
         return;
     }
     res.respondText(200, JSON.stringify({
         success: true,
-        token: generateAccessToken(email)
+        token: generateAccessToken(userDb.rows[0].id, email),
+        userId: userDb.rows[0].id
     }));
 }
 

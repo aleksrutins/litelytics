@@ -34,22 +34,16 @@ app.use((req, res, next) => {
 });
 
 
-app.use(express.static('public'));
-app.get('/', (req, res) => {
-    res.respond(200, 'index.html');
-});
-
-
 app.options('/api/site/*/track', cors());
-app.post('/api/site/:site/track', express.json(), cors(), async (req, res) => {
+app.post('/api/site/:domain/track', express.json(), cors(), async (req, res) => {
     // validation
     const body = req.body;
-    if(!('site' in body && 'path' in body)) {
+    if(!('path' in body)) {
         log("Not enough columns");
         res.respondText(500, JSON.stringify({
             success: false,
             err: 'ENOTENOUGH',
-            detail: 'Not enough columns in query; need site, path'
+            detail: 'Not enough columns in query; need path'
         }));
         return;
     }
@@ -76,9 +70,9 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
 app.get('/api/site/list', checkToken, listSites);
 app.get('/api/site/:site/data', express.json(), checkToken, getData);
 
-app.post('/api/user/:name/sign-in', express.json(), signIn);
+app.post('/api/user/:email/sign-in', express.json(), signIn);
 app.post('/api/user/:email/create', express.json(), addUser);
-app.post('/api/site/:site/user/:email/add', checkToken, addUserToSite);
+app.post('/api/site/:siteId/user/:userId/add', checkToken, addUserToSite);
 
 
 app.get('/log.js', (req, res) => {

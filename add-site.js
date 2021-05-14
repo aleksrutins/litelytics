@@ -44,9 +44,7 @@ export async function addSite(req, res) {
         
         await client.query('BEGIN');
         const result = await client.query('INSERT INTO sites(name) VALUES($1) RETURNING id', [req.params.name]);
-        await client.query('COMMIT');
-        await client.query('BEGIN');
-        const addUserResult = await client.query('INSERT INTO usersites(user_id, site_id) VALUES((SELECT id FROM users WHERE email = $1), $2)', [req.user, result.rows[0].id]);
+        const addUserResult = await client.query('INSERT INTO usersites(user_id, site_id) VALUES($1, $2)', [req.user.id, result.rows[0].id]);
         await client.query('COMMIT');
 
         res.respondText(200, JSON.stringify({
