@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        // Don't load anything until we're authenticated
+        if(!localStorage['token'] || !localStorage['email']) {
+            location.assign('/login.html');
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Litelytics Dashboard</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Litelytics Dashboard</h1>
+            <span id="site-name"></span>
+            <button id="logOutBtn">Log Out</button>
+        </header>
+        <div id="sections">
+            <section id="requests">
+                <table id="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Path</th>
+                            <th>User-Agent</th>
+                            <th>Referer</th>
+                        </tr>
+                    </thead>
+                </table>
+            </section>
+        </div>
+    </main>
+    <script src="/app.js" type="module"></script>
+</body>
+</html>
