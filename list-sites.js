@@ -13,7 +13,7 @@ select sites.id from usersites
 }
 
 export async function siteInfo(req, res) {
-    if(!isAuthorizedForSite(req.user.id, req.params.site)) {
+    if(!(await isAuthorizedForSite(req.user.id, req.params.site))) {
         res.respondText(403, JSON.stringify({
             success: false,
             err: 'EACCESS',
