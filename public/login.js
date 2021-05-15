@@ -6,8 +6,7 @@ const tokenInput       = document.querySelector('#token');
 const userIdInput      = document.querySelector('#user-id');
 const loginFailed      = document.querySelector('#login-failed');
 const createFailed     = document.querySelector('#create-failed');
-
-loginBtn.addEventListener('click', async function login() {
+async function login() {
     try {
         const result = await fetch(`/api/user/${email.value}/sign-in`, {
             method: 'POST',
@@ -28,7 +27,8 @@ loginBtn.addEventListener('click', async function login() {
     } catch(e) {
         loginFailed.removeAttribute('hidden');
     }
-});
+}
+loginBtn.addEventListener('click', login);
 createAccountBtn.addEventListener('click', async e => {
     try {
         const result = await fetch(`/api/user/${email.value}/create`, {
