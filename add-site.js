@@ -5,20 +5,16 @@ import { isAuthorizedForSite } from './authenticate.js';
 
 export async function addUser(req, res) {
     const data = req.body;
-    log("Getting client");
     const client = await db.getClient();
     try {
-        log("Checking if user already exists");
-        let exists = await (await client.query('SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)', [data.email])).rows[0].exists;
+        let exists = await (await client.query('SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)', [req.params.email])).rows[0].exists;
         if(exists) throw new Error('User exists');
-        log("begin");
+
         await client.query('BEGIN');
         const query = 'INSERT INTO users(email, password) VALUES($1, $2) RETURNING id';
-        log("insert");
-        const result = await db.query(query, [data.email, CryptoJS.SHA256(data.password).toString()]);
-        log('commit');
+        const result = await db.query(query, [req.params.email, CryptoJS.SHA256(data.password).toString()]);
         await client.query('COMMIT');
-        log('respond');
+
         res.respondText(200, JSON.stringify({
             success: true,
             id: result.rows[0].id
@@ -65,17 +61,18 @@ export async function addSite(req, res) {
 
 export async function addUserToSite(req, res) {
     const client = await db.getClient();
-    if(isAuthorizedForSite(req.user.id, req.params.site))
-    try {
-        
-    } catch(e) {
-        await client.query('ROLLBACK');
-        res.respondText(500, JSON.stringify({
-            success: false,
-            err: 'EDATABASE',
-            detail: e.message
-        }));
-    } finally {
-        client.release();
+    if(isAuthorizedForSite(req.user.id, req.params.site)) {
+        try {
+            
+        } catch(e) {
+            await client.query('ROLLBACK');
+            res.respondText(500, JSON.stringify({
+                success: false,
+                err: 'EDATABASE',
+                detail: e.message
+            }));
+        } finally {
+            client.release();
+        }
     }
 }

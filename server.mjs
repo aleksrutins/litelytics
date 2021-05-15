@@ -33,6 +33,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.static('public'));
 
 app.options('/api/site/*/track', cors());
 app.post('/api/site/:domain/track', express.json(), cors(), async (req, res) => {

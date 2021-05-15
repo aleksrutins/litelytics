@@ -1,0 +1,102 @@
+body {
+    --background-normal: white;
+    --color-primary: #3b8070;
+    --color-secondary: #35495e;
+    --color-danger: rgb(247, 47, 47);
+    --background-danger: rgba(255, 96, 96, 0.63);
+    --text-normal: black;
+    --text-normal-contrast: white;
+    --text-primary: white;
+    --text-secondary: white;
+    --text-danger: black;
+
+    --border-radius: 2px;
+    --border-width: 1px;
+    --border-style: solid;
+    --focus-border-width: 2px;
+
+    --padding: 5px;
+
+    --form-control-margin: 1px;
+
+    --transition-duration: 0.25s;
+    
+    --button-cursor: pointer;
+
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+}
+
+container {
+    display: block;
+    margin: auto;
+    width: 80%;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form :not(input[type=hidden]) {
+    margin: var(--form-control-margin);
+}
+button {
+    --text-color: var(--text-normal);
+    --background-color: var(--background-normal);
+    --background-hover: var(--text-normal);
+    --text-hover: var(--text-normal-contrast);
+    border-radius: var(--border-radius);
+    border: var(--border-width) var(--border-style) var(--text-color);
+    color: var(--text-color);
+    padding: var(--padding);
+    background-color: var(--background-color);
+    transition-property: background-color;
+    transition-duration: var(--transition-duration);
+    cursor: var(--button-cursor);
+}
+button[primary] {
+    --text-color: var(--color-primary);
+    --background-color: var(--text-primary);
+    --background-hover: var(--color-primary);
+    --text-hover: var(--text-primary);
+}
+button[secondary] {
+    --text-color: var(--color-secondary);
+    --background-color: var(--text-secondary);
+    --background-hover: var(--color-secondary);
+    --text-hover: var(--text-secondary);
+}
+
+input:not([type=hidden]) {
+    border-radius: var(--border-radius);
+    border: var(--border-width) var(--border-style) var(--color-primary);
+    color: var(--text-normal);
+    background-color: var(--background-normal);
+    padding: var(--padding);
+    box-sizing: border-box;
+}
+input:not([type=hidden]):focus {
+    outline: none;
+    border-width: var(--focus-border-width);
+}
+
+button:hover, button:focus {
+    background-color: var(--background-hover);
+    color: var(--text-hover);
+}
+
+[text-center] {
+    text-align: center;
+}
+
+h1 {
+    font-weight: normal;
+}
+noscript, .err {
+    border-radius: var(--border-radius);
+    border: var(--border-width) var(--border-style) var(--color-danger);
+    background-color: var(--background-danger);
+    color: var(--text-danger);
+    padding: var(--padding);
+    margin: auto;
+}

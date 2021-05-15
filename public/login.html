@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Litelytics Login</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <container>
+        <noscript>
+            This page needs JavaScript.
+        </noscript>
+        <div class="err" hidden id="login-failed">Login failed. Are you sure that account exists and you entered the correct password?</div>
+        <div class="err" hidden id="create-failed">Account creation failed. Probably that account already exists.</div>
+        <h1 text-center>Login</h1>
+        <form action="javascript:void(0)">
+            <input type="hidden" id="token">
+            <input type="hidden" id="user-id">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <div>
+                <button primary id="login">Log in</button>
+                <button secondary id="create-account">Create account</button>
+            </div>
+        </form>
+    </container>
+    <script src="login.js"></script>
+</body>
+</html>
