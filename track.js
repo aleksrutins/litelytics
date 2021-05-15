@@ -9,7 +9,7 @@ export default async function track(req, res) {
         const query = 'INSERT INTO visits(site, useragent, referer, path, timestamp, ip) VALUES($1, $2, $3, $4, $5, $6)';
         
         data.useragent = req.headers['user-agent'];
-        if('referrer' in req.headers) data.referer = req.headers['referer'];
+        if('referer' in req.headers) data.referer = req.headers['referer'];
         
         const result = await db.query(query, [siteId, data.useragent, data.referer || 'UNKNOWN', data.path, new Date().toString(), req.ip]);
         
