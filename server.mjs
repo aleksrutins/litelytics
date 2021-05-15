@@ -8,7 +8,7 @@ import track from './track.js';
 import { addSite, addUser, addUserToSite } from './add-site.js';
 import getData from './get-data.js';
 import { checkToken, signIn } from './authenticate.js';
-import { listSites } from './list-sites.js';
+import { listSites, siteInfo } from './list-sites.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -69,6 +69,7 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
 });
 
 app.get('/api/site/list', checkToken, listSites);
+app.get('/api/site/:site/info', checkToken, siteInfo)
 app.get('/api/site/:site/data', express.json(), checkToken, getData);
 
 app.post('/api/user/:email/sign-in', express.json(), signIn);
