@@ -19,6 +19,7 @@ export async function siteInfo(req, res) {
             err: 'EACCESS',
             detail: 'Unauthorized'
         }));
+        return;
     }
 
     const siteInfo = await db.query('select * from sites where id = $1', [req.params.site]);
