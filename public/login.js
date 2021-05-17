@@ -23,7 +23,7 @@ async function login() {
         const json = await result.json();
         tokenInput.value = json.token;
         userIdInput.value = json.userId;
-        window.dispatchEvent(new CustomEvent('logged-in', {detail: json}));
+        window.opener.dispatchEvent(new CustomEvent('litelytics-logged-in', {detail: json}));
     } catch(e) {
         loginFailed.removeAttribute('hidden');
     }
