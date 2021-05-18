@@ -68,8 +68,9 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
     await res.api(addSite);
 });
 
-app.use('/api/site/**', (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+app.use('/api/site/**', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "litelytics-dashboard.vercel.app"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 app.options('/api/site/list', cors());
