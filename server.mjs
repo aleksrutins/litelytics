@@ -70,6 +70,7 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
 
 app.use('/api/site/**', (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
 });
 app.options('/api/site/list', cors());
 app.get('/api/site/list', checkToken, listSites);
