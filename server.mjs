@@ -68,6 +68,7 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
     await res.api(addSite);
 });
 
+app.options('/api/site/*', cors());
 app.get('/api/site/list', cors(), checkToken, listSites);
 app.get('/api/site/:site/info', cors(), checkToken, siteInfo)
 app.get('/api/site/:site/data', cors(), express.json(), checkToken, getData);
