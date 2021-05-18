@@ -69,11 +69,11 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
 });
 
 app.options('/api/site/list', cors());
-app.get('/api/site/list', cors(), checkToken, listSites);
+app.get('/api/site/list', checkToken, listSites);
 app.options('/api/site/:site/info', cors());
-app.get('/api/site/:site/info', cors(), checkToken, siteInfo)
+app.get('/api/site/:site/info', checkToken, siteInfo)
 app.options('/api/site/:site/data', cors());
-app.get('/api/site/:site/data', cors(), express.json(), checkToken, getData);
+app.get('/api/site/:site/data', express.json(), checkToken, getData);
 
 app.post('/api/user/:email/sign-in', express.json(), signIn);
 app.post('/api/user/:email/create', express.json(), addUser);
