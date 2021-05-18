@@ -5,7 +5,7 @@ export async function listSites(req, res) {
 select sites.id from usersites
     left join sites on sites.id = site_id
     where user_id = $1
-    `, [req.user]);
+    `, [req.user.id]);
     res.respondText(200, JSON.stringify({
         success: true,
         sites: userSites.rows.map(row => row.id)
