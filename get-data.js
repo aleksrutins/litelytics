@@ -8,7 +8,6 @@ import { isAuthorizedForSite } from './authenticate.js';
  * @param {express.Response} res 
  */
 export default async function getData(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
     if(!(await isAuthorizedForSite(req.user.id, req.params.site))) {
         res.respondText(403, JSON.stringify({
             success: false,

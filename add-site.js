@@ -32,7 +32,6 @@ export async function addUser(req, res) {
 }
 
 export async function addSite(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
     log('Getting client')
     const client = await db.getClient();
     try {

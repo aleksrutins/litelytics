@@ -68,6 +68,9 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
     await res.api(addSite);
 });
 
+app.use('/api/site/**', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+});
 app.options('/api/site/list', cors());
 app.get('/api/site/list', checkToken, listSites);
 app.options('/api/site/:site/info', cors());
