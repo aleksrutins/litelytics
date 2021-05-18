@@ -25,6 +25,6 @@ export async function siteInfo(req, res) {
     const siteInfo = await db.query('select * from sites where id = $1', [req.params.site]);
     res.respondText(200, JSON.stringify({
         success: true,
-        data: siteInfo.rows[0]
+        info: siteInfo.rows[0]
     }));
 }
