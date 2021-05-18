@@ -69,7 +69,7 @@ app.post('/api/site/:name/create', express.json(), async (req, res) => {
 });
 
 app.use('/api/site/**', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "litelytics-dashboard.vercel.app"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "https://litelytics-dashboard.vercel.app");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
