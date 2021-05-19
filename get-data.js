@@ -16,7 +16,7 @@ export default async function getData(req, res) {
         }));
         return;
     }
-    const siteData = (await db.query(`select * from visits where site = $1`, [req.params.site])).rows;
+    const siteData = await db.query(`select * from visits where site = $1`, [req.params.site]);
     res.respondText(200, JSON.stringify({
         success: true,
         data: siteData.rows
