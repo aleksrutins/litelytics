@@ -47,3 +47,19 @@ export async function isAuthorizedForSite(user, site) {
     }
     return true;
 }
+
+export async function checkUserExists(id) {
+    const rowCount = (await db.query('select * from users where id = $1', [id])).rowCount;
+    if(rowCount == 0) {
+        return false;
+    }
+    return true;
+}
+
+export async function checkSiteExists(id) {
+    const rowCount = (await db.query('select * from sites where id = $1', [id])).rowCount;
+    if(rowCount == 0) {
+        return false;
+    }
+    return true;
+}

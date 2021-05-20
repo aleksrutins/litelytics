@@ -1,7 +1,7 @@
 import * as db from './db/index.js';
 import CryptoJS from 'crypto-js';
 import { log } from './log.js';
-import { isAuthorizedForSite } from './authenticate.js';
+import { checkSiteExists, isAuthorizedForSite } from './authenticate.js';
 
 export async function addUser(req, res) {
     const data = req.body;
@@ -61,9 +61,13 @@ export async function addSite(req, res) {
 
 export async function addUserToSite(req, res) {
     const client = await db.getClient();
-    if(isAuthorizedForSite(req.user.id, req.params.site)) {
+    if(isAuthorizedForSite(req.user.id, req.params.site) && checkUserExists(req.params.user) && checkSiteExists(req.params.site)) {
         try {
-            
+            await client.query('BEGIN');
+
+            const addUserResult = await client.query('INSERT INTO usersites(user_id, site_id) VALUES($1, $2)', [req.params.user, req.params.site]);
+
+            await client.query('')
         } catch(e) {
             await client.query('ROLLBACK');
             res.respondText(500, JSON.stringify({
