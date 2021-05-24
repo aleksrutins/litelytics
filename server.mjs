@@ -82,6 +82,7 @@ app.get('/api/site/:site/data', express.json(), checkToken, getData);
 
 app.post('/api/user/:email/sign-in', express.json(), signIn);
 app.post('/api/user/:email/create', express.json(), addUser);
+app.options('/api/site/:site/user/:user/add', cors());
 app.post('/api/site/:site/user/:user/add', checkToken, addUserToSite);
 
 
