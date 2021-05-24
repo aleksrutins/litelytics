@@ -1,7 +1,7 @@
 import * as db from './db/index.js';
 import CryptoJS from 'crypto-js';
 import { log } from './log.js';
-import { checkSiteExists, isAuthorizedForSite } from './authenticate.js';
+import { checkSiteExists, checkUserExists, isAuthorizedForSite } from './authenticate.js';
 
 export async function addUser(req, res) {
     const data = req.body;
@@ -61,7 +61,7 @@ export async function addSite(req, res) {
 
 export async function addUserToSite(req, res) {
     const client = await db.getClient();
-    if(isAuthorizedForSite(req.user.id, req.params.site) && checkUserExists(req.params.user) && checkSiteExists(req.params.site)) {
+    if(await isAuthorizedForSite(req.user.id, req.params.site) && await checkUserExists(req.params.user) && await checkSiteExists(req.params.site)) {
         try {
             await client.query('BEGIN');
 
