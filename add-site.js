@@ -61,7 +61,7 @@ export async function addSite(req, res) {
 
 export async function addUserToSite(req, res) {
     const client = await db.getClient();
-    if(await isAuthorizedForSite(req.user.id, req.params.site) && await checkUserExists(req.params.user) && await checkSiteExists(req.params.site)) {
+    if((await isAuthorizedForSite(req.user.id, req.params.site)) && (await checkUserExists(req.params.user)) && (await checkSiteExists(req.params.site))) {
         try {
             await client.query('BEGIN');
 
