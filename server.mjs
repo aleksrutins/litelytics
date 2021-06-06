@@ -55,6 +55,7 @@ app.post('/api/site/:domain/track', express.json(), cors(), async (req, res) => 
             err: 'EDNT',
             detail: 'Do-Not-Track or Global Privacy Control detected'
         });
+        return;
     }
     log("Beginning `track`");
     await res.api(track);
