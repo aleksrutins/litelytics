@@ -48,6 +48,14 @@ app.post('/api/site/:domain/track', express.json(), cors(), async (req, res) => 
         }));
         return;
     }
+    if(req.header('Sec-GPC') == 1 || req.header('DNT') == 1) {
+        log('GPC or DNT detected');
+        res.respondText(403, {
+            success: false,
+            err: 'EDNT',
+            detail: 'Do-Not-Track or Global Privacy Control detected'
+        });
+    }
     log("Beginning `track`");
     await res.api(track);
 });
