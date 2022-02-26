@@ -1,6 +1,6 @@
 FROM node:alpine
-ADD . /workspace
-WORKDIR /workspace
+ADD . /app
+WORKDIR /app
 RUN apk add curl
 RUN yarn
-CMD [ "yarn", "start" ]
+ENTRYPOINT [ "yarn", "start" ]
