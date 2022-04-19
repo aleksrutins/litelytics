@@ -1,6 +1,5 @@
 import express from 'express';
 import * as http from 'http';
-import { Server } from 'socket.io';
 import cors from 'cors';
 import { log } from './log.js';
 import { resolveRel } from './util.mjs';
@@ -12,7 +11,6 @@ import { listSites, siteInfo } from './list-sites.js';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
 app.use((req, res, next) => {
     log(`\x1B[36m${req.method}\x1B[0m \x1B[32m${req.path}\x1B[0m`);
