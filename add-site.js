@@ -63,11 +63,21 @@ export async function addUserToSite(req, res) {
     const client = await db.getClient();
     if((await isAuthorizedForSite(req.user.id, req.params.site)) && (await checkUserExists(req.params.user)) && (await checkSiteExists(req.params.site))) {
         try {
+            const userId = await client.query('SELECT id FROM users WHERE email = $1', [req.params.user]);
+            if(userId.rows.length <= 0) {
+                res.respondText(404, JSON.stringify({
+                    success: false,
+                    err: 'ENOUSER',
+                    detail: 'No such user: ' + req.params.user
+                }));
+                client.release();
+                return;
+            }
             await client.query('BEGIN');
 
-            const addUserResult = await client.query('INSERT INTO usersites(user_id, site_id) VALUES($1, $2)', [req.params.user, req.params.site]);
+            const addUserResult = await client.query('INSERT INTO usersites(user_id, site_id) VALUES($1, $2)', [userId.rows[0].id, req.params.site]);
 
-            await client.query('')
+            await client.query('COMMIT')
         } catch(e) {
             await client.query('ROLLBACK');
             res.respondText(500, JSON.stringify({
