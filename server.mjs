@@ -60,18 +60,6 @@ app.post('/api/site/:domain/track', express.json(), cors(), async (req, res) => 
 });
 
 app.post('/api/site/:name/create', express.json(), async (req, res) => {
-    // validation
-    const body = req.body;
-    if(!('password' in body)) {
-        console.log(body);
-        log("Not enough columns");
-        res.respondText(500, JSON.stringify({
-            success: false,
-            err: 'ENOTENOUGH',
-            detail: 'Not enough columns in query; need password'
-        }));
-        return;
-    }
     await res.api(addSite);
 });
 
