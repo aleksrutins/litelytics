@@ -22,5 +22,6 @@ CREATE TABLE visits (
   path	text,
   referer	text,
   timestamp	text,
-  ip	text
+  ip	text,
+  useragent text
 );
