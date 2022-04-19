@@ -5,7 +5,7 @@
   "description": "An analytics app.",
   "main": "server.mjs",
   "author": "Aleks Rutins <alex@rutins.com>",
-  "license": "BSD",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "cors": "^2.8.5",
