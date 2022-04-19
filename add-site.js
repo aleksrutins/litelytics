@@ -39,7 +39,7 @@ export async function addSite(req, res) {
         if(exists) throw new Error('Site exists');
         
         await client.query('BEGIN');
-        const result = await client.query('INSERT INTO sites(name) VALUES($1) RETURNING id', [req.params.name]);
+        const result = await client.query('INSERT INTO sites(domain) VALUES($1) RETURNING id', [req.params.name]);
         const addUserResult = await client.query('INSERT INTO usersites(user_id, site_id) VALUES($1, $2)', [req.user.id, result.rows[0].id]);
         await client.query('COMMIT');
 
