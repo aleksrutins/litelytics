@@ -1,0 +1,8 @@
+{% import "partials/nav_utils" as nav_utils %}
+{% macro nav(items) %}
+<div class="nav nav-pills flex-column align-items-stretch p-2">
+    {% for link in items %}
+    {{ nav_utils::link(label=link.label, url=link.url) }}
+    {% endfor %}
+</div>
+{% endmacro %}

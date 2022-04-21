@@ -1,0 +1,10 @@
+{% extends "base" %}
+{% import "partials/sidenav" as nav %}
+{% block content %}
+<div class="d-flex flex-row w-100 h-100 p-0 m-0">
+    {{ nav::nav(items=page.nav.items) }}
+    <div class="container p-2" style="overflow: auto;">
+        {% block page %}{% endblock page %}
+    </div>
+</div>
+{% endblock content %}

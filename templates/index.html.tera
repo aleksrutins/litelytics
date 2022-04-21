@@ -1,0 +1,4 @@
+{% extends "dashboard_page" %}
+{% block page %}
+Hello World!
+{% endblock page %}
