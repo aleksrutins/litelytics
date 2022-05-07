@@ -9,4 +9,4 @@ WORKDIR /app
 
 RUN cargo build --release
 
-CMD [ "./target/litelytics" ] 
+CMD [ "./target/release/litelytics" ] 
