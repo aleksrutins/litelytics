@@ -1,4 +1,4 @@
 {% extends "dashboard_page" %}
 {% block page %}
-Hello World!
+Welcome, {{ page.me }}!
 {% endblock page %}

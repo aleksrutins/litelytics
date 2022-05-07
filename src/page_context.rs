@@ -1,4 +1,4 @@
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::Serialize;
 
 use crate::nav::Nav;
 
@@ -10,8 +10,13 @@ pub struct PageContext {
 }
 
 #[derive(Serialize)]
-pub struct PageContextWrapper {
-    pub page: PageContext
+pub struct EmptyContext {
+    pub title: String
+}
+
+#[derive(Serialize)]
+pub struct PageContextWrapper<T: Serialize> {
+    pub page: T
 }
 
 macro_rules! context {

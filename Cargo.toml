@@ -9,8 +9,12 @@ edition = "2021"
 tera = "1"
 rocket = { version = "0.5.0-rc.1", features = ["secrets"] }
 rocket_dyn_templates = { version = "0.1.0-rc.1", features = ["tera"] }
-diesel = { version = "1.4.4", features = ["postgres"] }
 serde = "1.0.136"
 serde_derive = "1.0.136"
 dotenv = "0.15.0"
 paste = "1.0.7"
+sqlx = { version = "0.5", features = ["runtime-tokio-rustls", "postgres"] }
+tokio = { version = "1", features = ["full"] }
+lazy_static = "1.4.0"
+anyhow = "1.0.57"
+sha2 = "0.10.2"

@@ -1,0 +1,5 @@
+{% macro logo() %}
+<div>
+    <img src="/public/logo.webp" height="200" width="200">
+</div>
+{% endmacro logo %}
