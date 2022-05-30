@@ -3,12 +3,12 @@ use serde::Serialize;
 #[derive(Serialize)]
 pub struct NavItem {
     pub label: String,
-    pub url: String
+    pub url: String,
 }
 
 #[derive(Serialize)]
 pub struct Nav {
-    pub items: Vec<NavItem>
+    pub items: Vec<NavItem>,
 }
 
 macro_rules! nav_decl {

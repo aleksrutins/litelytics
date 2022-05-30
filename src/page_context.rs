@@ -6,21 +6,21 @@ use crate::nav::Nav;
 pub struct PageContext {
     pub title: String,
     pub nav: Nav,
-    pub url: String
+    pub url: String,
 }
 
 #[derive(Serialize)]
 pub struct EmptyContext {
-    pub title: String
+    pub title: String,
 }
 
 #[derive(Serialize)]
 pub struct PageContextWrapper<T: Serialize> {
-    pub page: T
+    pub page: T,
 }
 
 macro_rules! context {
     ($ctx:expr) => {
-        crate::page_context::PageContextWrapper {page: ($ctx)}
+        crate::page_context::PageContextWrapper { page: ($ctx) }
     };
 }
