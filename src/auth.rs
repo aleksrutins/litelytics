@@ -2,6 +2,7 @@ use anyhow::Result;
 use rocket::response::status::Unauthorized;
 use sha2::{Digest, Sha256};
 use sqlx::{Pool, Postgres};
+use std::str;
 
 #[derive(FromForm)]
 pub struct LoginRequest<'r> {
@@ -25,10 +26,7 @@ pub async fn user_exists(email: &str, pool: &Pool<Postgres>) -> Result<bool> {
     .map(|row| row.exists.unwrap_or(false))
 }
 
-pub async fn authenticate(
-    req: &LoginRequest<'_>,
-    pool: &Pool<Postgres>,
-) -> Result<i32> {
+pub async fn authenticate(req: &LoginRequest<'_>, pool: &Pool<Postgres>) -> Result<i32> {
     let pass_hash = hash(req.password.to_string());
     let record = sqlx::query!(
         r"
@@ -41,7 +39,7 @@ pub async fn authenticate(
     .await
     .map_err(|_| anyhow::anyhow!("Failed to fetch record"))?;
 
-    if record.password == pass_hash {
+    if str::from_utf8(&record.password).unwrap() == pass_hash {
         Ok(record.id)
     } else {
         Err(anyhow::anyhow!("Failed to authenticate"))
@@ -64,7 +62,7 @@ pub async fn create_account(
         RETURNING id
         ",
         req.email,
-        password_hash
+        password_hash.as_bytes()
     )
     .fetch_one(pool)
     .await
