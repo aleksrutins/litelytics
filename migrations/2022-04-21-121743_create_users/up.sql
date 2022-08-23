@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id serial primary key,
   email text unique not null,
   password text not null

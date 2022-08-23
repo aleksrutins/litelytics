@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE visits (
+CREATE TABLE IF NOT EXISTS visits (
   id serial primary key,
   site integer references sites(id) not null,
   path text not null,
