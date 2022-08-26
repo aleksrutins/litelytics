@@ -1,6 +1,4 @@
--- Your SQL goes here
-
-CREATE TABLE IF NOT EXISTS sites (
+CREATE TABLE sites (
     id serial primary key,
     domain text unique not null
 );
