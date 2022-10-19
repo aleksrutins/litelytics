@@ -1,7 +1,0 @@
-{% macro link(label, url) -%}
-    {% if page.url == url -%}
-    <a class="active" aria-current="page" href="{{url}}">{{label}}</a>
-    {% else -%}
-    <a href="{{url}}">{{label}}</a>
-    {% endif -%}
-{% endmacro nav_link -%}
