@@ -1,5 +1,3 @@
 (executable
  (name main)
- (public_name litelytics.exe)
- (libraries dream tyxml)
- (preprocess (pps lwt_ppx tyxml-jsx)))
+ (public_name litelytics.exe))

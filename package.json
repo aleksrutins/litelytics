@@ -1,12 +1,9 @@
 {
   "dependencies": {
-    "@opam/conf-libssl": "3",
     "@opam/dream": "1.0.0~alpha4",
     "@opam/dune": "*",
     "@opam/ocaml-lsp-server": "*",
     "@opam/reason": "*",
-    "@opam/tyxml": "4.5.0",
-    "@opam/tyxml-jsx": "4.5.0",
     "ocaml": "4.14.x"
   },
   "scripts": { "start": "esy x litelytics.exe" },
