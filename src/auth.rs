@@ -39,7 +39,7 @@ pub async fn authenticate(req: &LoginRequest<'_>, pool: &Pool<Postgres>) -> Resu
     .await
     .map_err(|_| anyhow::anyhow!("Failed to fetch record"))?;
 
-    if str::from_utf8(&record.password).unwrap() == pass_hash {
+    if record.password == pass_hash {
         Ok(record.id)
     } else {
         Err(anyhow::anyhow!("Failed to authenticate"))
@@ -62,7 +62,7 @@ pub async fn create_account(
         RETURNING id
         ",
         req.email,
-        password_hash.as_bytes()
+        password_hash
     )
     .fetch_one(pool)
     .await

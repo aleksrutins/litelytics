@@ -6,5 +6,6 @@
     {% for link in items -%}
     {{ nav_utils::link(label=link.label, url=link.url) -}}
     {% endfor -%}
+    {{ nav_utils::link(label="Log Out", url="/logout") -}}
 </div>
 {% endmacro -%}

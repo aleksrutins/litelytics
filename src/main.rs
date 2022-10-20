@@ -1,4 +1,3 @@
-#![feature(let_else)]
 mod auth;
 mod dashboard_context;
 mod db;
@@ -11,6 +10,7 @@ extern crate rocket;
 
 extern crate dotenv;
 extern crate sqlx;
+use anyhow::Result;
 use auth::LoginRequest;
 use dashboard_context::DashboardContext;
 use dotenv::dotenv;
@@ -28,7 +28,6 @@ use rocket::{
 };
 use rocket_dyn_templates::Template;
 use sqlx::{Pool, Postgres};
-use anyhow::Result;
 use std::env;
 
 #[get("/login")]
@@ -48,16 +47,16 @@ async fn authenticate(
     credentials: Form<Strict<LoginRequest<'_>>>,
 ) -> Result<Redirect, NotFound<String>> {
     let req = credentials.into_inner();
-    
+
     if let Ok(true) = auth::user_exists(&req.email, pool.inner()).await {
         if let Ok(id) = auth::authenticate(&req, pool.inner()).await {
             cookies.add_private(Cookie::new("user_id", id.to_string()));
 
-            return Ok(Redirect::to(uri!(index)))
+            return Ok(Redirect::to(uri!(index)));
         }
     }
 
-    return Err(NotFound(format!("Authentication failed")))
+    return Err(NotFound(format!("Authentication failed")));
 }
 
 #[post("/create-account", data = "<credentials>")]
@@ -71,6 +70,7 @@ async fn create_account(
     let user_id = auth::create_account(&req, pool.inner()).await?;
 
     cookies.add_private(Cookie::new("user_id", user_id.to_string()));
+    cookies.add_private(Cookie::new("user_email", req.email.to_string()));
 
     Ok(Redirect::to(uri!(index)))
 }
@@ -84,20 +84,24 @@ async fn index(
         return Err(Redirect::to(uri!(login)));
     };
 
-    let email = sqlx::query!(
-        r"
+    let email = if let Some(email) = cookies.get_private("user_email") {
+        email.value().to_string()
+    } else {
+        sqlx::query!(
+            r"
 SELECT email FROM users
 WHERE id = $1
     ",
-        user_id
-            .value()
-            .parse::<i32>()
-            .or(Err(Redirect::to(uri!(login))))?
-    )
-    .fetch_one(pool.inner())
-    .await
-    .map_err(|_| Redirect::to(uri!(login)))?
-    .email;
+            user_id
+                .value()
+                .parse::<i32>()
+                .or(Err(Redirect::to(uri!(login))))?
+        )
+        .fetch_one(pool.inner())
+        .await
+        .map_err(|_| Redirect::to(uri!(login)))?
+        .email
+    };
 
     Ok(Template::render(
         "index",
@@ -117,6 +121,13 @@ fn about() -> Template {
     )
 }
 
+#[get("/logout")]
+fn logout(cookies: &CookieJar<'_>) -> Redirect {
+    cookies.remove_private(Cookie::named("user_id"));
+    cookies.remove_private(Cookie::named("user_email"));
+    Redirect::to(uri!(login))
+}
+
 #[launch]
 async fn rocket() -> _ {
     dotenv().ok();
@@ -124,7 +135,7 @@ async fn rocket() -> _ {
     rocket::build()
         .mount(
             "/",
-            routes![index, about, login, authenticate, create_account],
+            routes![index, about, login, logout, authenticate, create_account],
         )
         .mount("/public", FileServer::from(relative!("public")))
         .manage(pool)
