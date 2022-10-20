@@ -13,13 +13,18 @@ body {
     display: flex;
     flex-direction: row;
 }
-.dashboard-page_nav {
+.dashboard-page_nav-container {
     flex-shrink: 1;
     display: flex;
     flex-direction: column;
     background-color: var(--color-alt-bg);
     padding: 20px;
     list-style-type: none;
+    justify-content: space-between;
+}
+.dashboard-page_nav {
+    display: flex;
+    flex-direction: column;
 }
 .dashboard-page_nav a {
     text-decoration: none;
