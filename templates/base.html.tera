@@ -12,5 +12,7 @@
 <body>
     {% block content -%}
     {% endblock content -%}
+    {% block scripts -%}
+    {% endblock scripts -%}
 </body>
 </html>

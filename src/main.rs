@@ -1,7 +1,10 @@
 mod auth;
+#[macro_use]
+mod page;
 mod dashboard_context;
 mod db;
 mod nav;
+mod api;
 #[macro_use]
 mod page_context;
 
@@ -14,8 +17,7 @@ use anyhow::Result;
 use auth::LoginRequest;
 use dashboard_context::DashboardContext;
 use dotenv::dotenv;
-use nav::Nav;
-use page_context::{EmptyContext, PageContext};
+use page_context::EmptyContext;
 use rocket::{
     form::{Form, Strict},
     fs::{relative, FileServer},
@@ -30,15 +32,15 @@ use rocket_dyn_templates::Template;
 use sqlx::{Pool, Postgres};
 use std::env;
 
-#[get("/login")]
-async fn login() -> Template {
-    Template::render(
-        "login",
-        context!(EmptyContext {
-            title: "Log In".into()
-        }),
-    )
-}
+// Dashboard pages
+
+dashboard_page!(index, "/", "index");
+
+dashboard_page!(about, "/about", "about");
+
+// End dashboard pages
+
+basic_page!(login, "/login", "login", "Log In");
 
 #[post("/login", data = "<credentials>")]
 async fn authenticate(
@@ -51,6 +53,7 @@ async fn authenticate(
     if let Ok(true) = auth::user_exists(&req.email, pool.inner()).await {
         if let Ok(id) = auth::authenticate(&req, pool.inner()).await {
             cookies.add_private(Cookie::new("user_id", id.to_string()));
+            cookies.add_private(Cookie::new("user_email", req.email.to_string()));
 
             return Ok(Redirect::to(uri!(index)));
         }
@@ -75,52 +78,6 @@ async fn create_account(
     Ok(Redirect::to(uri!(index)))
 }
 
-#[get("/")]
-async fn index(
-    pool: &State<Pool<Postgres>>,
-    cookies: &CookieJar<'_>,
-) -> Result<Template, Redirect> {
-    let Some(user_id) = cookies.get_private("user_id") else {
-        return Err(Redirect::to(uri!(login)));
-    };
-
-    let email = if let Some(email) = cookies.get_private("user_email") {
-        email.value().to_string()
-    } else {
-        sqlx::query!(
-            r"
-SELECT email FROM users
-WHERE id = $1
-    ",
-            user_id
-                .value()
-                .parse::<i32>()
-                .or(Err(Redirect::to(uri!(login))))?
-        )
-        .fetch_one(pool.inner())
-        .await
-        .map_err(|_| Redirect::to(uri!(login)))?
-        .email
-    };
-
-    Ok(Template::render(
-        "index",
-        context!(DashboardContext::new("/".to_string(), email)),
-    ))
-}
-
-#[get("/about")]
-fn about() -> Template {
-    Template::render(
-        "about",
-        context!(PageContext {
-            nav: Nav::default(),
-            url: "/about".to_string(),
-            title: "About".to_string()
-        }),
-    )
-}
-
 #[get("/logout")]
 fn logout(cookies: &CookieJar<'_>) -> Redirect {
     cookies.remove_private(Cookie::named("user_id"));
@@ -137,6 +94,7 @@ async fn rocket() -> _ {
             "/",
             routes![index, about, login, logout, authenticate, create_account],
         )
+        .mount("/api", api::api())
         .mount("/public", FileServer::from(relative!("public")))
         .manage(pool)
         .attach(Template::fairing())

@@ -9,6 +9,7 @@
         {% endfor -%}
     </div>
     <div class="dashboard-page_nav">
+        <a>{{page.me}}</a>
         {{ nav_utils::link(label="Log Out", url="/logout") -}}
     </div>
 </div>
