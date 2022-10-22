@@ -1,4 +1,4 @@
-FROM rust:alpine AS build
+FROM rust:slim AS build
 
 RUN apk add libpq-dev
 
@@ -12,8 +12,8 @@ ENV DATABASE_URL=${DATABASE_URL}
 
 RUN cargo build --release
 
-FROM rust:alpine
-ARG ROCKET_ADDRESS
+FROM rust:slim
+ARG ROCKET_ADDRESS=0.0.0.0
 ARG ROCKET_SECRET_KEY
 ENV ROCKET_ADDRESS=${ROCKET_ADDRESS}
 ENV ROCKET_SECRET_KEY=${ROCKET_SECRET_KEY}
