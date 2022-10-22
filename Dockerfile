@@ -1,6 +1,6 @@
 FROM rust:slim AS build
 
-RUN apt-get update && apt-get install libpq-dev
+RUN apt-get update && apt-get install -y libpq-dev
 
 RUN rustup default nightly
 
