@@ -20,8 +20,8 @@ ENV ROCKET_SECRET_KEY=${ROCKET_SECRET_KEY}
 
 WORKDIR /app
 
-COPY --from=build /app/target/release/litelytics .
-COPY --from=build /app/public .
-COPY --from=build /app/templates .
+COPY --from=build /app/target/release/litelytics /app/litelytics
+COPY --from=build /app/public /app/public
+COPY --from=build /app/templates /app/templates
 
 CMD [ "./litelytics" ] 
