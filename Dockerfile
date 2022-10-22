@@ -18,6 +18,8 @@ ARG ROCKET_SECRET_KEY
 ENV ROCKET_ADDRESS=${ROCKET_ADDRESS}
 ENV ROCKET_SECRET_KEY=${ROCKET_SECRET_KEY}
 
+WORKDIR /app
+
 COPY --from=build /app/target/release/litelytics .
 COPY --from=build /app/public .
 COPY --from=build /app/templates .
