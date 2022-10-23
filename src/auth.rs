@@ -1,5 +1,5 @@
 use anyhow::Result;
-use rocket::response::status::Unauthorized;
+use rocket::{http::CookieJar, response::status::Unauthorized};
 use sha2::{Digest, Sha256};
 use sqlx::{Pool, Postgres};
 use std::str;
@@ -70,6 +70,10 @@ pub async fn create_account(
     .id;
 
     Ok(user_id)
+}
+
+pub fn ensure_authenticated(cookies: &CookieJar) -> bool {
+    return cookies.get("user_id") != None;
 }
 
 fn hash(str: String) -> String {
