@@ -7,6 +7,7 @@ mod nav;
 mod api;
 #[macro_use]
 mod page_context;
+mod models;
 
 #[macro_use]
 extern crate rocket;

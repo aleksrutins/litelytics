@@ -73,7 +73,7 @@ pub async fn create_account(
 }
 
 pub fn ensure_authenticated(cookies: &CookieJar) -> bool {
-    return cookies.get("user_id") != None;
+    return cookies.get_private("user_id") != None;
 }
 
 fn hash(str: String) -> String {

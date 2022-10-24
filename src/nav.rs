@@ -26,7 +26,7 @@ macro_rules! nav_decl {
 impl Nav {
     pub fn default() -> Nav {
         nav_decl!(
-            "Home" => "/",
+            "Sites" => "/",
             "About" => "/about"
         )
     }

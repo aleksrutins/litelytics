@@ -1,4 +1,8 @@
 {% extends "dashboard_page" %}
 {% block page %}
-Welcome, {{ page.me }}!
+<h1>Your Sites</h1>
+<div id="app"></div>
 {% endblock page %}
+{% block scripts -%}
+<script type="module" src="/public/js/sites.js"></script>
+{% endblock scripts -%}
