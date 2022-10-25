@@ -4,7 +4,9 @@
 <div class="dashboard-page">
     {{ nav::nav(items=page.nav.items) }}
     <div class="dashboard-page_content">
-        {% block page -%}{% endblock page -%}
+        {% block page -%}
+        <ll-app></ll-app>
+        {% endblock page -%}
     </div>
 </div>
 {% endblock content -%}

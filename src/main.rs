@@ -39,6 +39,8 @@ dashboard_page!(index, "/", "index");
 
 dashboard_page!(about, "/about", "about");
 
+dashboard_page!(site_info, "/sites/<_>", "site_info");
+
 // End dashboard pages
 
 basic_page!(login, "/login", "login", "Log In");
@@ -93,7 +95,7 @@ async fn rocket() -> _ {
     rocket::build()
         .mount(
             "/",
-            routes![index, about, login, logout, authenticate, create_account],
+            routes![index, about, login, logout, authenticate, create_account, site_info],
         )
         .mount("/api", api::api())
         .mount("/public", FileServer::from(relative!("public")))

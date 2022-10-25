@@ -1,11 +1,25 @@
-const sites = await (await fetch("/api/sites")).json();
-const app = document.querySelector("#app");
+import { LitElement, html } from './lit-core.min.js';
+import './components/loader.js';
+import './components/site-link.js';
 
-for(const site of sites) {
-    console.log(site);
-    const el = document.createElement('a');
-    el.href = `/sites/${site.id}`;
-    el.textContent = site.domain;
-    el.classList.add("link");
-    app.appendChild(el);
+class AppView extends LitElement {
+    static properties = {
+        sites: {}
+    }
+    constructor() {
+        super();
+        this.sites = null;
+        fetch('/api/sites')
+            .then(res => res.json())
+            .then(res => this.sites = res);
+    }
+    render() {
+        return html`
+            <h1>Your Sites</h1>
+            ${this.sites? this.sites.map(site => html`
+                <site-link id=${site.id} domain=${site.domain}></site-link>
+            `) : html`<ll-loader></ll-loader>`}
+        `
+    }
 }
+customElements.define('ll-app', AppView);
