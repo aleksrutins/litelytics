@@ -1,3 +1,5 @@
+#![feature(async_fn_in_trait)]
+
 mod auth;
 #[macro_use]
 mod page;

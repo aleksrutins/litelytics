@@ -31,6 +31,9 @@ pub async fn sites(
     serde_json::to_string(&sites).map_err(|_| Unauthorized(Some("Error".to_string())))
 }
 
+#[post("/track")]
+pub async fn track(pool: &State<Pool<Postgres>>, )
+
 #[get("/sites/<id>")]
 pub async fn site_data(id: i32, cookies: &CookieJar<'_>, pool: &State<Pool<Postgres>>) -> Result<String, Unauthorized<String>> {
     let Some(user_id) = cookies.get_private("user_id").map(|c| c.value().to_string()) else {
