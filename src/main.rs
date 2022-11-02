@@ -3,10 +3,10 @@
 mod auth;
 #[macro_use]
 mod page;
+mod api;
 mod dashboard_context;
 mod db;
 mod nav;
-mod api;
 #[macro_use]
 mod page_context;
 mod models;
@@ -97,10 +97,19 @@ async fn rocket() -> _ {
     rocket::build()
         .mount(
             "/",
-            routes![index, about, login, logout, authenticate, create_account, site_info],
+            routes![
+                index,
+                about,
+                login,
+                logout,
+                authenticate,
+                create_account,
+                site_info
+            ],
         )
         .mount("/api", api::api())
         .mount("/public", FileServer::from(relative!("public")))
+        .mount("/.well-known", FileServer::from(relative!("well-known")))
         .manage(pool)
         .attach(Template::fairing())
 }

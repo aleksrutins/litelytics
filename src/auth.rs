@@ -76,6 +76,16 @@ pub fn ensure_authenticated(cookies: &CookieJar) -> bool {
     return cookies.get_private("user_id") != None;
 }
 
+pub fn ensure_authenticated_for_site(cookies: &CookieJar, site: i32, pool: &Pool<Postgres>) -> bool {
+    let Some(user_id) = cookies.get_private("user_id") else { return };
+    let exists = sqlx::query!("
+    select exists(
+        select * from usersites
+        where user_id = $1 and site_id = $2
+    )
+    ", user_id.value().parse(), site);
+}
+
 fn hash(str: String) -> String {
     let mut hasher = Sha256::new();
     hasher.update(str.as_bytes());

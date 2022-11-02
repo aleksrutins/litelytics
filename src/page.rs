@@ -19,9 +19,9 @@ macro_rules! dashboard_page {
             cookies: &CookieJar<'_>,
         ) -> Result<Template, Redirect> {
             let Some(user_id) = cookies.get_private("user_id") else {
-                return Err(Redirect::to(uri!(login)));
-            };
-        
+                        return Err(Redirect::to(uri!(login)));
+                    };
+
             let email = if let Some(email) = cookies.get_private("user_email") {
                 email.value().to_string()
             } else {
@@ -40,7 +40,7 @@ macro_rules! dashboard_page {
                 .map_err(|_| Redirect::to(uri!(login)))?
                 .email
             };
-        
+
             Ok(Template::render(
                 $template,
                 context!(DashboardContext::new($url.to_string(), email)),

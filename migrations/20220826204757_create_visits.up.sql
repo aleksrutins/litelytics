@@ -4,6 +4,6 @@ CREATE TABLE visits (
   site integer references sites(id) not null,
   path text not null,
   referer text not null,
-  timestamp text not null,
+  timestamp bigint not null,
   ip text
 );

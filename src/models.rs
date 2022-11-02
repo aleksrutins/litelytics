@@ -1,5 +1,11 @@
-use rocket::{request::{FromRequest, self}, http::uri::Uri};
+use rocket::{
+    http::{uri::Authority, Status},
+    outcome::Outcome,
+    request::{self, FromRequest},
+    State,
+};
 use serde::{Deserialize, Serialize};
+use sqlx::{Pool, Postgres};
 
 #[derive(Serialize, Deserialize)]
 pub struct Site {
@@ -20,7 +26,7 @@ pub struct Visit {
     pub site: i32,
     pub path: String,
     pub referer: String,
-    pub timestamp: String,
+    pub timestamp: i64,
     pub ip: Option<String>,
 }
 
@@ -29,8 +35,21 @@ pub struct CreateVisit {
     pub site: i32,
     pub path: String,
     pub referer: String,
-    pub timestamp: String,
+    pub timestamp: i64,
     pub ip: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateVisitMeta {
+    pub site: i32,
+    pub timestamp: i64,
+    pub ip: Option<String>
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateVisitRequest {
+    pub path: String,
+    pub referer: String
 }
 
 #[derive(Serialize, Deserialize)]
@@ -39,23 +58,46 @@ pub struct SiteData {
     pub visits: Vec<Visit>,
 }
 
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for CreateVisitMeta {
+    type Error = ();
 
-
-impl<'a, 'r> FromRequest<'r> for CreateVisit {
-    type Error = Box<dyn std::error::Error>;
-
-    async fn from_request(request: &'r rocket::Request<'a>) -> request::Outcome<Self, Self::Error> {
-        let domain = Uri::parse(request.headers().get_one("Origin").expect("Origin header not found"))?.authority().unwrap().host();
-        let site = sqlx::query!(
+    async fn from_request(request: &'r rocket::Request<'_>) -> request::Outcome<Self, Self::Error> {
+        let pool = match <&State<Pool<Postgres>>>::from_request(request).await {
+            Outcome::Success(pool) => pool,
+            Outcome::Failure(e) => return Outcome::Failure(e),
+            Outcome::Forward(f) => return Outcome::Forward(f),
+        };
+        let domain = Authority::parse(
+            request
+                .headers()
+                .get_one("Origin")
+                .expect("Origin header not found"),
+        )
+        .unwrap();
+        let site = if let Ok(site) = sqlx::query!(
             "select id from sites
             where domain = $1",
-            domain
-        );
-        // rocket::outcome::Outcome::Success(
-        //     Self {
-
-        //     }
-        // )
-        todo!()
+            domain.host()
+        )
+        .fetch_one(pool.inner())
+        .await
+        .map(|record| record.id)
+        {
+            site
+        } else {
+            return Outcome::Failure((Status::InternalServerError, ()));
+        };
+        Outcome::Success(
+            Self {
+                site,
+                ip: if Some("1") == request.headers().get_one("Sec-GPC") || Some("1") == request.headers().get_one("DNT") {
+                    None
+                } else {
+                    request.client_ip().map(|ip| ip.to_string())
+                },
+                timestamp: chrono::offset::Utc::now().timestamp()
+            }
+        )
     }
 }
