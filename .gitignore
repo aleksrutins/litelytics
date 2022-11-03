@@ -1,5 +1,2 @@
-/target
 .env
-fleet.toml
-.cargo/
-builddir/
+build/

@@ -1,0 +1,9 @@
+{% macro logo() %}
+<div>
+    <img src="/public/assets/logo.webp" height="200" width="200">
+</div>
+{% endmacro logo %}
+
+{% macro script(source) %}
+<script type="module" src={{"/public/js/" ~ source ~ ".js"}}></script>
+{% endmacro script %}

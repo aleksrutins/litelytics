@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(litelytics CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+file(GLOB SRC_FILES src/*.cc)
+add_executable(litelytics ${SRC_FILES})
+find_package(Crow)
+target_link_libraries(litelytics PUBLIC Crow::Crow)
