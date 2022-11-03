@@ -2,3 +2,4 @@
 .env
 fleet.toml
 .cargo/
+builddir/

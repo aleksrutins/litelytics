@@ -1,8 +1,8 @@
-FROM rust:slim AS build
+FROM debian AS build
 
-RUN apt-get update && apt-get install -y libpq-dev
+RUN apt-get update && apt-get install -y libpq-dev meson
 
-RUN rustup default nightly
+RUN apt-get install https://github.com/CrowCpp/Crow/releases/download/v1.0%2B5/crow-v1.0+5.deb
 
 ADD . /app
 WORKDIR /app
@@ -10,18 +10,10 @@ WORKDIR /app
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
-RUN cargo build --release
+RUN meson builddir
+RUN ninja -C builddir
 
-FROM rust:slim
-ARG ROCKET_ADDRESS=0.0.0.0
-ARG ROCKET_SECRET_KEY
-ENV ROCKET_ADDRESS=${ROCKET_ADDRESS}
-ENV ROCKET_SECRET_KEY=${ROCKET_SECRET_KEY}
+ARG SECRET_KEY
+ENV SECRET_KEY=${SECRET_KEY}
 
-WORKDIR /app
-
-COPY --from=build /app/target/release/litelytics /app/litelytics
-COPY --from=build /app/public /app/public
-COPY --from=build /app/templates /app/templates
-
-CMD [ "./litelytics" ] 
+CMD [ "./builddir/src/litelytics" ] 
