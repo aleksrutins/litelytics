@@ -1,6 +1,6 @@
 FROM debian
 
-RUN apt-get update && apt-get install -y libpq-dev meson cmake wget gcc 'g++'
+RUN apt-get update && apt-get install -y libpq-dev meson cmake wget gcc 'g++' asio-dev
 
 RUN wget -O crow.deb "https://github.com/CrowCpp/Crow/releases/download/v1.0%2B5/crow-v1.0+5.deb"
 RUN dpkg -i ./crow.deb
