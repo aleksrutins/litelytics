@@ -1,0 +1,2 @@
+bool isRailway();
+bool isProduction();

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "env.hh"
+
 pqxx::connection *dbconn = nullptr;
 
 int main() {
@@ -20,11 +22,19 @@ int main() {
             res.set_static_file_info("static/index.html");
             res.end();
         });
-        auto port_str = getenv("PORT");
+        auto portStr = getenv("PORT");
         int port = 
-            port_str == nullptr
+            portStr == nullptr
                 ? 8080
-                : atoi(port_str);
+                : atoi(portStr);
+        if(isRailway()) {
+            std::cout << "Running in Railway!" << std::endl;
+            if(isProduction()) {
+                std::cout << "Running in production; some logs will be silenced" << std::endl;
+                app.loglevel(crow::LogLevel::WARNING);
+            }
+        }
+        std::cout << "\e[1mStarting server on port " << port << "\e[0m" << std::endl;
         app.port(port).multithreaded().run();
         return 0;
     } catch(std::exception const &e) {
