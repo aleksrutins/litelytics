@@ -1,2 +1,7 @@
+#pragma once
 #include <pqxx/pqxx>
-extern pqxx::connection *dbconn;
+
+namespace litelytics::db {
+    bool isConnected();
+    pqxx::connection *conn();
+}

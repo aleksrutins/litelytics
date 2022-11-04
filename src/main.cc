@@ -6,7 +6,7 @@
 
 #include "env.hh"
 
-pqxx::connection *dbconn = nullptr;
+pqxx::connection *ll_db_conn = nullptr;
 
 int main() {
     try {
@@ -15,7 +15,7 @@ int main() {
             std::cerr << "Error: Please provide the DATABASE_URL environment variable, pointing to a valid PostgreSQL server." << std::endl;
             return 1;
         }
-        dbconn = new pqxx::connection(dburl);
+        ll_db_conn = new pqxx::connection(dburl);
         std::cout << "Connected to database" << std::endl;
         crow::SimpleApp app;
         CROW_ROUTE (app, "/")([](crow::response &res) {
