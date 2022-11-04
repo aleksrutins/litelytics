@@ -3,7 +3,9 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+
 pqxx::connection *dbconn = nullptr;
+
 int main() {
     try {
         auto dburl = getenv("DATABASE_URL");
