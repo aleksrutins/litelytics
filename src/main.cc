@@ -31,9 +31,9 @@ int main() {
         });
         auto portStr = getenv("PORT");
         int port = 
-            portStr == nullptr
-                ? 8080
-                : atoi(portStr);
+            portStr
+                ? atoi(portStr)
+                : 8080;
         if(isRailway()) {
             std::cout << "Running in Railway!" << std::endl;
             if(isProduction()) {
