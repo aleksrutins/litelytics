@@ -16,4 +16,7 @@ RUN mkdir build && cd build && cmake -GNinja .. && ninja
 ARG SECRET_KEY
 ENV SECRET_KEY=${SECRET_KEY}
 
+ARG PORT
+ENV PORT=${PORT}
+
 CMD [ "./build/litelytics" ] 
