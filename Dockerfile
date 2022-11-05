@@ -1,9 +1,9 @@
-FROM debian
+FROM quay.io/fedora/fedora:37
 
-RUN apt-get update && apt-get install -y libpq-dev libpqxx-dev cmake ninja-build wget gcc 'g++' libasio-dev libboost-dev libboost-system-dev libssl-dev
+RUN dnf install -y libpq-devel libpqxx-devel cmake ninja-build wget gcc 'gcc-c++' asio-devel boost-devel openssl-devel
 
-RUN wget -O crow.deb "https://github.com/CrowCpp/Crow/releases/download/v1.0%2B5/crow-v1.0+5.deb"
-RUN dpkg -i ./crow.deb
+RUN wget -O crow.tar.gz "https://github.com/CrowCpp/Crow/releases/download/v1.0%2B5/crow-v1.0+5.deb" && \
+    tar -xzf crow.tar.gz -C /usr/local
 
 ADD . /app
 WORKDIR /app
