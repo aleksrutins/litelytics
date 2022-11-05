@@ -1,19 +1,43 @@
 #include <openssl/sha.h>
+#include <string>
+
+#include "crypt.hh"
+#include "util/except.hh"
+
+using namespace std;
+using namespace litelytics;
 
 namespace litelytics::crypt {
+    char cryptErrSha256[] = "Error calculating SHA256 hash";
+    using Sha256Exception = util::except::Exception<cryptErrSha256>;
     // https://stackoverflow.com/a/2262447
-    bool sha256(void *input, size_t length, unsigned char *out) {
+    ustring sha256(string input) {
         SHA256_CTX context;
 
-        if(!SHA256_Init(&context))
-            return false;
+        size_t len = input.length();
+        unsigned char out[SHA256_DIGEST_LENGTH];
 
-        if(!SHA256_Update(&context, input, length))
-            return false;
+        if(!SHA256_Init(&context))
+            throw Sha256Exception();
+
+        if(!SHA256_Update(&context, input.c_str(), len))
+            throw Sha256Exception();
 
         if(!SHA256_Final(out, &context))
-            return false;
+            throw Sha256Exception();
 
-        return true;
+        return out;
+    }
+
+    ustring string_to_ustring(string str) {
+        char *original_buf = str.data();
+        u_char *new_buf = new u_char[str.length() + 1];
+        size_t i = 0;
+        while(*(original_buf + i)) {
+            *(new_buf + i) = *(original_buf + i);
+            i++;
+        }
+        *(new_buf + i) = 0; // null terminator
+        return ustring(new_buf);
     }
 }

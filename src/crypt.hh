@@ -1,5 +1,10 @@
 #pragma once
 #include <cstddef>
+#include <stdexcept>
+#include <string>
+
 namespace litelytics::crypt {
-    bool sha256(void *input, size_t length, unsigned char *out);
+    using ustring = std::basic_string<unsigned char>;
+    ustring string_to_ustring(std::string str);
+    ustring sha256(std::string);
 }

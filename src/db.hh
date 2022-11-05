@@ -3,5 +3,5 @@
 
 namespace litelytics::db {
     bool isConnected();
-    pqxx::connection *conn();
+    pqxx::connection *ref();
 }

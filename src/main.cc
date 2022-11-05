@@ -8,6 +8,13 @@
 
 pqxx::connection *ll_db_conn = nullptr;
 
+void cleanup() {
+    if(ll_db_conn) {
+        ll_db_conn->close();
+        delete ll_db_conn;
+    }
+}
+
 int main() {
     try {
         auto dburl = getenv("DATABASE_URL");
@@ -36,9 +43,11 @@ int main() {
         }
         std::cout << "\e[1mStarting server on port " << port << "\e[0m" << std::endl;
         app.port(port).multithreaded().run();
+        cleanup();
         return 0;
     } catch(std::exception const &e) {
         std::cerr << e.what() << std::endl;
+        cleanup();
         return 1;
     }
 }

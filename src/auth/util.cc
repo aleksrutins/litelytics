@@ -6,12 +6,21 @@
 using namespace litelytics;
 using namespace std;
 namespace litelytics::auth::util {
-    bool checkCredentials(char *email, char *passwd) {
-        if(!db::isConnected())
+    bool checkCredentials(string email, string passwd) {
+        if(!db::isConnected()) return false;
         try {
-            pqxx::work txn{*db::conn()};
+            bool result = false;
+            pqxx::work txn{*db::ref()};
+            auto expectedHash = crypt::string_to_ustring(txn.query_value<string>(
+                "SELECT password FROM users"
+                "WHERE email = '" + txn.esc(email) + "'"
+            ));
+            crypt::ustring actualHash = crypt::sha256(passwd);
+            if(actualHash == expectedHash) result = true;
+            txn.commit();
+            return result;
         } catch(const std::exception &e) {
-
         }
+        return false;
     }
 }
