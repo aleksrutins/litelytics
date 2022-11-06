@@ -1,3 +1,4 @@
+#include <openssl/evp.h>
 #include <openssl/sha.h>
 #include <string>
 
@@ -12,18 +13,18 @@ namespace litelytics::crypt {
     using Sha256Exception = util::except::Exception<cryptErrSha256>;
     // https://stackoverflow.com/a/2262447
     ustring sha256(string input) {
-        SHA256_CTX context;
+        EVP_MD_CTX *context = EVP_MD_CTX_new();
 
         size_t len = input.length();
         unsigned char out[SHA256_DIGEST_LENGTH];
 
-        if(!SHA256_Init(&context))
+        if(!EVP_DigestInit_ex(context, EVP_get_digestbyname("SHA256"), NULL))
             throw Sha256Exception();
 
-        if(!SHA256_Update(&context, input.c_str(), len))
+        if(!EVP_DigestUpdate(context, input.c_str(), len))
             throw Sha256Exception();
 
-        if(!SHA256_Final(out, &context))
+        if(!EVP_DigestFinal(context, out, NULL))
             throw Sha256Exception();
 
         return out;
