@@ -1,3 +1,4 @@
 .env
+.pginfo
 build/
 .cache/

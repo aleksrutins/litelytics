@@ -1,19 +1,18 @@
-{% import "partials/components" as components %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block head -%}
+    {{$head}}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title }} | Litelytics</title>
+    <title>{{$title}}{{/title}} | Litelytics</title>
     <link href="/public/app.css" rel="stylesheet">
-    {% endblock head -%}
+    {{/head}}
 </head>
 <body>
-    {% block content -%}
-    {% endblock content -%}
-    {% block scripts -%}
-    {% endblock scripts -%}
+    {{$content}}
+    {{/content}}
+    {{$scripts}}
+    {{/scripts}}
 </body>
 </html>

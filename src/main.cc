@@ -1,28 +1,50 @@
 #include <crow.h>
+#include <crow/middlewares/session.h>
+#include <crow/middlewares/cookie_parser.h>
 #include <pqxx/pqxx>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <memory>
 
 #include "env.hh"
+#include "app.hh"
+#include "auth/AuthController.hh"
+#include "util/misc.hh"
+
+using namespace litelytics::app;
+using namespace litelytics::util;
+using litelytics::auth::AuthController;
+using namespace std;
 
 std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
 
 int main() {
     try {
-        auto dburl = getenv("DATABASE_URL");
-        if(dburl == nullptr) {
-            std::cerr << "Error: Please provide the DATABASE_URL environment variable, pointing to a valid PostgreSQL server." << std::endl;
+        auto dburl = getenv_opt("DATABASE_URL");
+        if(!dburl.has_value()) {
+            ifstream fp(".pginfo");
+            string url;
+            getline(fp, url);
+            dburl = url;
+        }
+        if(!dburl.has_value()) {
+            std::cerr << "Error: Please provide the DATABASE_URL environment variable or a database connection string in a .pginfo file, pointing to a valid PostgreSQL server." << std::endl;
             return 1;
         }
-        ll_db_conn = std::make_unique<pqxx::connection>(dburl);
+        ll_db_conn = std::make_unique<pqxx::connection>(dburl.value());
         std::cout << "Connected to database" << std::endl;
-        crow::SimpleApp app;
+        App app{Session{
+            crow::FileStore{"/tmp/litelytics.session_data"}
+        }};
         CROW_ROUTE (app, "/")([](crow::response &res) {
             res.set_static_file_info("static/index.html");
             res.end();
         });
+
+        AuthController::mount(app);
+
         auto portStr = getenv("PORT");
         int port = 
             portStr

@@ -1,16 +1,14 @@
-{% extends "base" -%}
-{% import "partials/components" as components -%}
-{% block content -%}
-<div class="login-page">
-    {{ components::logo() }}
+<head>
+    <title>Log In | Litelytics</title>
+</head>
+<div style="display: flex; flex-direction: column; align-items: center;">
     <h1>Log In</h1>
-    <form action="/login" method="post">
-        <input type="email" required name="email" placeholder="E-Mail Address" />
-        <input type="password" required name="password" placeholder="Password" />
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Log In</button>
+    <form action="/auth/login" method="post">
+        <input type="email" required name="email" placeholder="E-Mail Address" style="display: block;" />
+        <input type="password" required name="password" placeholder="Password" style="display: block;" />
+        <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 5px;">
+            <button type="submit" style="margin-right: 2px;">Log In</button>
             <button type="submit" class="btn" formaction="/create-account">Create Account</button>
         </div>
     </form>
 </div>
-{% endblock content %}

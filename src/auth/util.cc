@@ -1,6 +1,6 @@
 #include <string>
 
-#include "auth.hh"
+#include "util.hh"
 #include "../db.hh"
 #include "../crypt.hh"
 using namespace litelytics;
