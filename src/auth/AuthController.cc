@@ -3,7 +3,7 @@
 using namespace litelytics::app;
 
 namespace litelytics::auth {
-    auto login(crow::request &req) {
+    auto login() {
         auto page = crow::mustache::load("login.html");
         return page.render();
     }
