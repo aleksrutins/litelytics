@@ -3,17 +3,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+#include <memory>
 
 #include "env.hh"
 
-pqxx::connection *ll_db_conn = nullptr;
-
-void cleanup() {
-    if(ll_db_conn) {
-        ll_db_conn->close();
-        delete ll_db_conn;
-    }
-}
+std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
 
 int main() {
     try {
@@ -22,7 +16,7 @@ int main() {
             std::cerr << "Error: Please provide the DATABASE_URL environment variable, pointing to a valid PostgreSQL server." << std::endl;
             return 1;
         }
-        ll_db_conn = new pqxx::connection(dburl);
+        ll_db_conn = std::make_unique<pqxx::connection>(dburl);
         std::cout << "Connected to database" << std::endl;
         crow::SimpleApp app;
         CROW_ROUTE (app, "/")([](crow::response &res) {
@@ -43,11 +37,9 @@ int main() {
         }
         std::cout << "\e[1mStarting server on port " << port << "\e[0m" << std::endl;
         app.port(port).multithreaded().run();
-        cleanup();
         return 0;
     } catch(std::exception const &e) {
         std::cerr << e.what() << std::endl;
-        cleanup();
         return 1;
     }
 }

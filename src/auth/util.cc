@@ -10,7 +10,7 @@ namespace litelytics::auth::util {
         if(!db::isConnected()) return false;
         try {
             bool result = false;
-            pqxx::work txn{*db::ref()};
+            pqxx::work txn{db::conn()};
             auto expectedHash = crypt::string_to_ustring(txn.query_value<string>(
                 "SELECT password FROM users"
                 "WHERE email = '" + txn.esc(email) + "'"
@@ -20,7 +20,7 @@ namespace litelytics::auth::util {
             txn.commit();
             return result;
         } catch(const std::exception &e) {
+            return false;
         }
-        return false;
     }
 }
