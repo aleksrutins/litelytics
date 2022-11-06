@@ -42,7 +42,7 @@ int main() {
             res.end();
         });
 
-        litelytics::auth::routes::mount(app);
+        litelytics::auth::routes::mount(&app);
 
         auto portStr = getenv("PORT");
         int port = 
