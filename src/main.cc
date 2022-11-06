@@ -15,7 +15,6 @@
 
 using namespace litelytics::app;
 using namespace litelytics::util;
-using litelytics::auth::AuthController;
 using namespace std;
 
 std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
@@ -43,7 +42,7 @@ int main() {
             res.end();
         });
 
-        AuthController::mount(app);
+        litelytics::auth::routes::mount(app);
 
         auto portStr = getenv("PORT");
         int port = 

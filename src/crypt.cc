@@ -16,7 +16,8 @@ namespace litelytics::crypt {
         EVP_MD_CTX *context = EVP_MD_CTX_new();
 
         size_t len = input.length();
-        unsigned char out[SHA256_DIGEST_LENGTH];
+        ustring out;
+        out.reserve(SHA256_DIGEST_LENGTH);
 
         if(!EVP_DigestInit_ex(context, EVP_get_digestbyname("SHA256"), NULL))
             throw Sha256Exception();
@@ -24,21 +25,9 @@ namespace litelytics::crypt {
         if(!EVP_DigestUpdate(context, input.c_str(), len))
             throw Sha256Exception();
 
-        if(!EVP_DigestFinal(context, out, NULL))
+        if(!EVP_DigestFinal(context, (unsigned char *) out.data(), NULL))
             throw Sha256Exception();
 
         return out;
-    }
-
-    ustring string_to_ustring(string str) {
-        char *original_buf = str.data();
-        u_char *new_buf = new u_char[str.length() + 1];
-        size_t i = 0;
-        while(*(original_buf + i)) {
-            *(new_buf + i) = *(original_buf + i);
-            i++;
-        }
-        *(new_buf + i) = 0; // null terminator
-        return ustring(new_buf);
     }
 }

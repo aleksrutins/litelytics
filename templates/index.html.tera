@@ -1,5 +1,0 @@
-{% import "partials/components" as components %}
-{% extends "dashboard_page" %}
-{% block scripts %}
-{{ components::script(source = "sites") -}}
-{% endblock scripts %}
