@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <fstream>
 
 #include "misc.hh"
 
@@ -12,5 +13,15 @@ namespace litelytics::util {
         } else {
             return make_optional<string>(env);
         }
+    }
+    optional<string> getAppOption(const char *env, const char *file) {
+        auto value = getenv_opt(env);
+        if(!value.has_value()) {
+            ifstream fp(".pginfo");
+            string url;
+            getline(fp, url);
+            value = url;
+        }
+        return value;
     }
 }

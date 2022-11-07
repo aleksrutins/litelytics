@@ -1,4 +1,5 @@
 .env
 .pginfo
+.secret-key
 build/
 .cache/

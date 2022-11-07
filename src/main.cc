@@ -4,7 +4,6 @@
 #include <pqxx/pqxx>
 #include <cstdlib>
 #include <iostream>
-#include <fstream>
 #include <stdexcept>
 #include <memory>
 
@@ -18,20 +17,16 @@ using namespace litelytics::util;
 using namespace std;
 
 std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
+std::string secret_key;
 
 int main() {
     try {
-        auto dburl = getenv_opt("DATABASE_URL");
-        if(!dburl.has_value()) {
-            ifstream fp(".pginfo");
-            string url;
-            getline(fp, url);
-            dburl = url;
-        }
+        auto dburl = getAppOption("DATABASE_URL", ".pginfo");
         if(!dburl.has_value()) {
             std::cerr << "Error: Please provide the DATABASE_URL environment variable or a database connection string in a .pginfo file, pointing to a valid PostgreSQL server." << std::endl;
             return 1;
         }
+        
         ll_db_conn = std::make_unique<pqxx::connection>(dburl.value());
         std::cout << "Connected to database" << std::endl;
         App app{Session{
