@@ -6,26 +6,37 @@
 #include <iostream>
 #include <stdexcept>
 #include <memory>
+#include <openssl/aes.h>
 
 #include "env.hh"
 #include "app.hh"
+#include "crypt.hh"
 #include "auth/AuthController.hh"
 #include "util/misc.hh"
 
+using namespace litelytics;
 using namespace litelytics::app;
 using namespace litelytics::util;
 using namespace std;
 
 std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
-std::string secret_key;
+unsigned char ll_secret_key[crypt::KEY_LENGTH_BYTES];
+unsigned char ll_crypt_iv[crypt::IV_LENGTH_BYTES];
 
 int main() {
     try {
         auto dburl = getAppOption("DATABASE_URL", ".pginfo");
         if(!dburl.has_value()) {
-            std::cerr << "Error: Please provide the DATABASE_URL environment variable or a database connection string in a .pginfo file, pointing to a valid PostgreSQL server." << std::endl;
+            cerr << "Error: Please provide either the DATABASE_URL environment variable or a database connection string in a .pginfo file, pointing to a valid PostgreSQL server." << endl;
             return 1;
         }
+
+        auto secretKeyOpt = getAppOption("SECRET_KEY", ".secret-key");
+        if(!secretKeyOpt.has_value()) {
+            std::cerr << "Error: Please provide an encryption key in either the SECRET_KEY environmeny variable or a .secret-key file." << endl;
+            return 1;
+        }
+        memcpy(ll_secret_key, secretKeyOpt.value().data(), crypt::KEY_LENGTH_BYTES);
         
         ll_db_conn = std::make_unique<pqxx::connection>(dburl.value());
         std::cout << "Connected to database" << std::endl;
