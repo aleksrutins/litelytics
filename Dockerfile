@@ -1,6 +1,6 @@
 FROM quay.io/fedora/fedora:37
 
-RUN dnf install -y libpq-devel libpqxx-devel cmake ninja-build wget gcc git 'gcc-c++' asio-devel boost-devel openssl-devel
+RUN dnf install -y libpq-devel libpqxx-devel cmake meson ninja-build wget gcc git 'gcc-c++' asio-devel boost-devel openssl-devel
 
 RUN mkdir -p /opt
 RUN git clone https://github.com/CrowCpp/Crow.git /opt/crow
@@ -16,7 +16,7 @@ WORKDIR /app
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
-RUN mkdir build && cd build && cmake -GNinja .. && ninja
+RUN meson build && ninja -C build
 
 ARG SECRET_KEY
 ENV SECRET_KEY=${SECRET_KEY}
