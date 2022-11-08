@@ -8,5 +8,10 @@ namespace litelytics::crypt {
     const unsigned char IV_LENGTH_BYTES = 16;
     using ustring = std::basic_string<std::byte>;
     ustring sha256(std::string);
-    ustring aes(std::string);
+    struct AESResult {
+        ustring ciphertext;
+        unsigned char iv[IV_LENGTH_BYTES];
+        unsigned long err;
+    };
+    AESResult aes(std::string);
 }

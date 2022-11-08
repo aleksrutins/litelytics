@@ -3,6 +3,9 @@
 </head>
 <div style="display: flex; flex-direction: column; align-items: center;">
     <h1>Log In</h1>
+    {{#error}}
+    <p style="color: red">{{error}}</p>
+    {{/error}}
     <form action="/auth/login" method="post">
         <input type="email" required name="email" placeholder="E-Mail Address" style="display: block;" />
         <input type="password" required name="password" placeholder="Password" style="display: block;" />

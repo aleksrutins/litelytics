@@ -1,5 +1,7 @@
 #include <openssl/evp.h>
 #include <openssl/sha.h>
+#include <openssl/rand.h>
+#include <openssl/err.h>
 #include <string>
 
 #include "crypt.hh"
@@ -9,7 +11,6 @@ using namespace std;
 using namespace litelytics;
 
 extern unsigned char *ll_secret_key;
-extern unsigned char *ll_crypt_iv;
 
 namespace litelytics::crypt {
     char cryptErrSha256[] = "Error calculating SHA256 hash";
@@ -36,14 +37,20 @@ namespace litelytics::crypt {
         return out;
     }
 
-    ustring aes(string plaintext) {
+    AESResult aes(string plaintext) {
         EVP_CIPHER_CTX *ctx;
         int len;
         int ciphertext_len;
 
-        ustring ciphertext;
+        AESResult result;
+        result.err = 0;
 
-        ciphertext.reserve(((plaintext.length() / 8) + 2) * 8);
+        result.ciphertext.reserve(((plaintext.length() / 8) + 2) * 8);
+
+        if(!RAND_bytes(result.iv, IV_LENGTH_BYTES)) {
+            result.err = ERR_get_error();
+            return result;
+        }
 
         if(!(ctx = EVP_CIPHER_CTX_new()))
             throw AESException();
@@ -55,14 +62,14 @@ namespace litelytics::crypt {
         * IV size for *most* modes is the same as the block size. For AES this
         * is 128 bits
         */
-        if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, ll_secret_key, ll_crypt_iv))
+        if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, ll_secret_key, result.iv))
             throw AESException();
 
         /*
         * Provide the message to be encrypted, and obtain the encrypted output.
         * EVP_EncryptUpdate can be called multiple times if necessary
         */
-        if(1 != EVP_EncryptUpdate(ctx, (unsigned char *) ciphertext.data(), &len, (const unsigned char *) plaintext.c_str(), plaintext.length()))
+        if(1 != EVP_EncryptUpdate(ctx, (unsigned char *) result.ciphertext.data(), &len, (const unsigned char *) plaintext.c_str(), plaintext.length()))
             throw AESException();
         ciphertext_len = len;
 
@@ -70,13 +77,13 @@ namespace litelytics::crypt {
         * Finalise the encryption. Further ciphertext bytes may be written at
         * this stage.
         */
-        if(1 != EVP_EncryptFinal_ex(ctx, ((unsigned char *)ciphertext.data()) + len, &len))
+        if(1 != EVP_EncryptFinal_ex(ctx, ((unsigned char *) result.ciphertext.data()) + len, &len))
             throw AESException();
         ciphertext_len += len;
 
         /* Clean up */
         EVP_CIPHER_CTX_free(ctx);
 
-        return ciphertext;
+        return result;
     }
 }

@@ -21,7 +21,6 @@ using namespace std;
 
 std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
 unsigned char ll_secret_key[crypt::KEY_LENGTH_BYTES];
-unsigned char ll_crypt_iv[crypt::IV_LENGTH_BYTES];
 
 int main() {
     try {
