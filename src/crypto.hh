@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace litelytics::crypt {
+namespace litelytics::crypto {
     const unsigned char KEY_LENGTH_BYTES = 32;
     const unsigned char IV_LENGTH_BYTES = 16;
     using ustring = std::basic_string<std::byte>;

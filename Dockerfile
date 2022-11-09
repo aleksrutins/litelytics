@@ -16,7 +16,7 @@ WORKDIR /app
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
-RUN meson build && ninja -C build
+RUN meson builddir && ninja -C builddir
 
 ARG SECRET_KEY
 ENV SECRET_KEY=${SECRET_KEY}
@@ -24,4 +24,4 @@ ENV SECRET_KEY=${SECRET_KEY}
 ARG PORT
 ENV PORT=${PORT}
 
-CMD [ "./build/litelytics" ] 
+CMD [ "./builddir/src/litelytics" ] 

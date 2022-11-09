@@ -3,7 +3,7 @@
 #include "AuthController.hh"
 #include "util.hh"
 #include "db.hh"
-#include "crypt.hh"
+#include "crypto.hh"
 
 using namespace std;
 using namespace litelytics;
@@ -14,11 +14,19 @@ namespace litelytics::auth::routes {
     App *_globalApp;
 
     bool authenticateSimple(crow::request req, int userId, string email) {
-        auto encryptedId = crypt::aes(to_string(userId));
-        if(encryptedId.err != 0) return false;
-        auto encryptedEmail = crypt::aes(email);
-        if(encryptedEmail.err != 0) return false;
+        auto encryptedId = crypto::aes(to_string(userId));
+        if(encryptedId.err != 0) {
+            cout << "Error encrypting id: " << encryptedId.err << std::endl;
+            return false;
+        }
+
+        auto encryptedEmail = crypto::aes(email);
+        if(encryptedEmail.err != 0) {
+            cout << "Error encrypting id: " << encryptedEmail.err << std::endl;
+            return false;
+        }
         auto idStr = (encryptedId.ciphertext + (byte)'/') + (byte*)encryptedId.iv;
+        cout << idStr.c_str() << endl;
         auto emailStr = (encryptedEmail.ciphertext + (byte)'/') + (byte*)encryptedEmail.iv;
         
         auto &session = _globalApp->get_context<Session>(req);
@@ -30,6 +38,7 @@ namespace litelytics::auth::routes {
 
     bool authenticate(crow::request req, char *email, char *password) {
         if(!checkCredentials(email, password)) {
+            cout << "Invalid credentials" << endl;
             return false;
         }
         pqxx::work txn{db::conn()};
@@ -67,24 +76,24 @@ namespace litelytics::auth::routes {
            , *password = data.get("password");
         try {
             pqxx::work txn{db::conn()};
-            int userId = txn.query_value<int>("SELECT id FROM users WHERE email = '" + txn.esc(email) + "'");
+            txn.query_value<int>("SELECT id FROM users WHERE email = '" + txn.esc(email) + "'");
             txn.commit();
             res.redirect("/login?err=User%20already%20exists");
             res.end();
             return;
-        } catch(std::exception _e) {
-            auto passwordHash = crypt::sha256(password);
+        } catch(std::exception &_e) {
+            auto passwordHash = crypto::sha256(password);
             auto &conn = db::conn();
             conn.prepare("createUser",
-                "INSERT INTO USERS (email, password)"
-                "VALUES ($1, $2)"
+                "INSERT INTO USERS (email, password) "
+                "VALUES ($1, $2) "
                 "RETURNING id"
             );
             pqxx::work txn{conn};
             auto result = txn.exec_prepared1("createUser", email, passwordHash);
             txn.commit();
             if(!authenticateSimple(req, result[0].as<int>(), email)) {
-                res.redirect("/login?err=Error%20creating%20user");
+                res.redirect("/auth/login?err=Error%20creating%20user");
                 res.end();
                 return;
             };

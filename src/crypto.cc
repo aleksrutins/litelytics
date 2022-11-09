@@ -3,8 +3,9 @@
 #include <openssl/rand.h>
 #include <openssl/err.h>
 #include <string>
+#include <iostream>
 
-#include "crypt.hh"
+#include "crypto.hh"
 #include "util/except.hh"
 
 using namespace std;
@@ -12,7 +13,7 @@ using namespace litelytics;
 
 extern unsigned char *ll_secret_key;
 
-namespace litelytics::crypt {
+namespace litelytics::crypto {
     char cryptErrSha256[] = "Error calculating SHA256 hash";
     using Sha256Exception = util::except::Exception<cryptErrSha256>;
     char cryptErrAES[] = "Error encrypting using AES";
@@ -40,20 +41,25 @@ namespace litelytics::crypt {
     AESResult aes(string plaintext) {
         EVP_CIPHER_CTX *ctx;
         int len;
-        int ciphertext_len;
 
         AESResult result;
         result.err = 0;
 
-        result.ciphertext.reserve(((plaintext.length() / 8) + 2) * 8);
+        result.ciphertext.reserve(((plaintext.length() / 128) + 2) * 128);
+        cout << "Reserved " << result.ciphertext.capacity() << " bytes" << endl;
 
         if(!RAND_bytes(result.iv, IV_LENGTH_BYTES)) {
             result.err = ERR_get_error();
             return result;
         }
 
+        cout << "Generated random IV" << endl;
+
         if(!(ctx = EVP_CIPHER_CTX_new()))
             throw AESException();
+
+        cout << "Initialized cipher" << endl;
+
         
         /*
         * Initialise the encryption operation. IMPORTANT - ensure you use a key
@@ -62,16 +68,18 @@ namespace litelytics::crypt {
         * IV size for *most* modes is the same as the block size. For AES this
         * is 128 bits
         */
-        if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, ll_secret_key, result.iv))
+        int err;
+        if(1 != (err = EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, ll_secret_key, result.iv))) {
+            cout << "Error initializing operation: " << ERR_get_error() << endl;
             throw AESException();
-
+        }
+        cout << "Initialized operation" << endl;
         /*
         * Provide the message to be encrypted, and obtain the encrypted output.
         * EVP_EncryptUpdate can be called multiple times if necessary
         */
         if(1 != EVP_EncryptUpdate(ctx, (unsigned char *) result.ciphertext.data(), &len, (const unsigned char *) plaintext.c_str(), plaintext.length()))
             throw AESException();
-        ciphertext_len = len;
 
         /*
         * Finalise the encryption. Further ciphertext bytes may be written at
@@ -79,7 +87,6 @@ namespace litelytics::crypt {
         */
         if(1 != EVP_EncryptFinal_ex(ctx, ((unsigned char *) result.ciphertext.data()) + len, &len))
             throw AESException();
-        ciphertext_len += len;
 
         /* Clean up */
         EVP_CIPHER_CTX_free(ctx);

@@ -10,7 +10,7 @@
 
 #include "env.hh"
 #include "app.hh"
-#include "crypt.hh"
+#include "crypto.hh"
 #include "auth/AuthController.hh"
 #include "util/misc.hh"
 
@@ -20,7 +20,7 @@ using namespace litelytics::util;
 using namespace std;
 
 std::unique_ptr<pqxx::connection> ll_db_conn = nullptr;
-unsigned char ll_secret_key[crypt::KEY_LENGTH_BYTES];
+unsigned char ll_secret_key[crypto::KEY_LENGTH_BYTES];
 
 int main() {
     try {
@@ -35,7 +35,7 @@ int main() {
             std::cerr << "Error: Please provide an encryption key in either the SECRET_KEY environmeny variable or a .secret-key file." << endl;
             return 1;
         }
-        memcpy(ll_secret_key, secretKeyOpt.value().data(), crypt::KEY_LENGTH_BYTES);
+        memcpy(ll_secret_key, secretKeyOpt.value().data(), crypto::KEY_LENGTH_BYTES);
         
         ll_db_conn = std::make_unique<pqxx::connection>(dburl.value());
         std::cout << "Connected to database" << std::endl;

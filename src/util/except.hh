@@ -5,7 +5,7 @@ namespace litelytics::util::except {
     template<char const *const message>
     class Exception : public std::exception {
     public:
-        constexpr char *what() { 
+        virtual const char *what() { 
             return message;
         }
     };
