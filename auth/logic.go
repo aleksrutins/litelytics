@@ -36,5 +36,5 @@ func authenticateRequest(c *fiber.Ctx, user *ent.User) {
 }
 
 func IsAuthenticated(c *fiber.Ctx) bool {
-	return c.Cookies("userID") != "" && c.Cookies("userEmail") != ""
+	return c.Cookies("userId") != "" && c.Cookies("userEmail") != ""
 }
