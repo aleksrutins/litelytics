@@ -46,6 +46,12 @@ func main() {
 		}
 		return c.Render("index", util.CreateContext(c))
 	})
+	app.Get("/sites/:id", func(c *fiber.Ctx) error {
+		if auth.GetUser(c) == nil {
+			c.Redirect("/auth/login")
+		}
+		return c.Render("site_info", util.CreateContext(c))
+	})
 
 	app.Mount("/auth", auth.Routes)
 	app.Mount("/api", api.Routes)

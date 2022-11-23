@@ -14,6 +14,7 @@ class AppView extends LitElement {
         fetch(`/api/sites/${id}`)
             .then(res => res.json())
             .then(res => this.data = res)
+            .then(_ => console.log(this.data))
             .catch(e => {
                 console.log(e);
                 this.error = true;
@@ -26,7 +27,7 @@ class AppView extends LitElement {
                 ? html`<span class="error">Error fetching site data</span>`
                 : this.data
                     ? html`
-                        <h1>${this.data.site.domain}</h1>
+                        <h1>${this.data.domain}</h1>
                     `
                     : html`<ll-loader></ll-loader>`
             }

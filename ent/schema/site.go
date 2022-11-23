@@ -14,7 +14,7 @@ type Site struct {
 // Fields of the Site.
 func (Site) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("domain"),
+		field.String("domain").Unique(),
 	}
 }
 
