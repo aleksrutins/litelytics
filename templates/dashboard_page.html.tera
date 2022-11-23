@@ -1,6 +1,6 @@
 {% extends "base" -%}
 {% import "partials/sidenav" as nav -%}
-{% block content -%}
+{% block content -}
 <div class="dashboard-page">
     {{ nav::nav(items=page.nav.items) }}
     <div class="dashboard-page_content">

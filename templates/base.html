@@ -1,18 +1,18 @@
+{{define "base"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {{$head}}
+    {{block "head" .}}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{$title}}{{/title}} | Litelytics</title>
-    <link href="/public/app.css" rel="stylesheet">
-    {{/head}}
+    <title>{{block "title" .}}Home{{end}} | Litelytics</title>
+    <link href="/static/app.css" rel="stylesheet">
+    {{end}}
 </head>
 <body>
-    {{$content}}
-    {{/content}}
-    {{$scripts}}
-    {{/scripts}}
+    {{block "content" .}}{{end}}
+    {{block "scripts" .}}{{end}}
 </body>
 </html>
+{{end}}

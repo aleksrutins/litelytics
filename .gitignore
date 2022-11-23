@@ -1,5 +1,1 @@
 .env
-.pginfo
-.secret-key
-builddir/
-.cache/

@@ -1,17 +1,18 @@
-<head>
-    <title>Log In | Litelytics</title>
-</head>
-<div style="display: flex; flex-direction: column; align-items: center;">
+{{template "base" .}}
+{{define "title"}}Log In{{end}}
+{{define "content"}}
+<div class="login-page">
     <h1>Log In</h1>
-    {{#error}}
-    <p style="color: red">{{error}}</p>
-    {{/error}}
+    {{if .Error}}
+    <p style="color: red">{{.Error}}</p>
+    {{end}}
     <form action="/auth/login" method="post">
         <input type="email" required name="email" placeholder="E-Mail Address" style="display: block;" />
         <input type="password" required name="password" placeholder="Password" style="display: block;" />
-        <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 5px;">
-            <button type="submit" style="margin-right: 2px;">Log In</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Log In</button>
             <button type="submit" class="btn" formaction="/auth/create-account">Create Account</button>
         </div>
     </form>
 </div>
+{{end}}
