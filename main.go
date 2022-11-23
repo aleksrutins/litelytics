@@ -15,6 +15,11 @@ func main() {
 	})
 
 	app.Static("/static", "./static")
+	
+	app.Get("/", func(c *fiber.Ctx) error {
+		c.Send([]byte("Welcome"))
+		return nil
+	})
 
 	app.Mount("/auth", auth.Routes)
 	port := os.Getenv("PORT")
