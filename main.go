@@ -6,6 +6,7 @@ import (
 
 	"github.com/aleksrutins/litelytics/auth"
 	"github.com/aleksrutins/litelytics/dbutil"
+	"github.com/aleksrutins/litelytics/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/template/html"
@@ -24,6 +25,10 @@ func main() {
 
 	templates := html.New("./templates", ".html")
 
+	templates.AddFunc("headMeta", func(title string) map[string]interface{} {
+		return fiber.Map{"Title": title}
+	})
+
 	app := fiber.New(fiber.Config{
 		Views: templates,
 	})
@@ -35,11 +40,10 @@ func main() {
 	app.Static("/static", "./static")
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		if !auth.IsAuthenticated(c) {
+		if auth.GetUser(c) == nil {
 			c.Redirect("/auth/login")
 		}
-		c.Send([]byte("Welcome"))
-		return nil
+		return c.Render("index", util.CreateContext(c))
 	})
 
 	app.Mount("/auth", auth.Routes)

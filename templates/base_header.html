@@ -1,18 +1,13 @@
-{{define "base"}}
+{{define "base_header"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {{block "head" .}}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{block "title" .}}Home{{end}} | Litelytics</title>
+    <meta name="theme-color" content="#DC7E1F">
+    <title>{{.Title}} | Litelytics</title>
     <link href="/static/app.css" rel="stylesheet">
-    {{end}}
 </head>
 <body>
-    {{block "content" .}}{{end}}
-    {{block "scripts" .}}{{end}}
-</body>
-</html>
 {{end}}

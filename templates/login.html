@@ -1,6 +1,4 @@
-{{template "base" .}}
-{{define "title"}}Log In{{end}}
-{{define "content"}}
+{{template "base_header" (headMeta "Log In")}}
 <div class="login-page">
     <h1>Log In</h1>
     {{if .Error}}
@@ -15,4 +13,4 @@
         </div>
     </form>
 </div>
-{{end}}
+{{template "base_footer" .}}
