@@ -4,5 +4,6 @@ import "github.com/gofiber/fiber/v2"
 
 func logOut(c *fiber.Ctx) error {
 	c.ClearCookie("userId", "userEmail")
+	c.RedirectBack("/")
 	return nil
 }
