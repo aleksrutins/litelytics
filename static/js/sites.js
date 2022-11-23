@@ -17,7 +17,7 @@ class AppView extends LitElement {
         return html`
             <h1>Your Sites</h1>
             ${this.sites? this.sites.map(site => html`
-                <site-link id=${site.id} domain=${site.domain}></site-link>
+                <site-link id=${site.ID} domain=${site.Domain}></site-link>
             `) : html`<ll-loader></ll-loader>`}
         `
     }

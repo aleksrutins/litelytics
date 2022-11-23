@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/aleksrutins/litelytics/api"
 	"github.com/aleksrutins/litelytics/auth"
 	"github.com/aleksrutins/litelytics/dbutil"
 	"github.com/aleksrutins/litelytics/util"
@@ -47,6 +48,8 @@ func main() {
 	})
 
 	app.Mount("/auth", auth.Routes)
+	app.Mount("/api", api.Routes)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"

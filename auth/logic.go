@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
+	"strconv"
 
 	"github.com/aleksrutins/litelytics/dbutil"
 	"github.com/aleksrutins/litelytics/ent"
@@ -37,8 +38,12 @@ func authenticateRequest(c *fiber.Ctx, user *ent.User) {
 
 func GetUser(c *fiber.Ctx) *UserInfo {
 	if c.Cookies("userId") != "" && c.Cookies("userEmail") != "" {
+		userId, err := strconv.ParseInt(c.Cookies("userId"), 10, 0)
+		if err != nil {
+			return nil
+		}
 		return &UserInfo{
-			ID:    c.Cookies("userId"),
+			ID:    int(userId),
 			Email: c.Cookies("userEmail"),
 		}
 	} else {

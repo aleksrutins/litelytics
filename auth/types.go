@@ -6,6 +6,6 @@ type Credentials struct {
 }
 
 type UserInfo struct {
-	ID    string
+	ID    int
 	Email string
 }
