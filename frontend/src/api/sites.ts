@@ -15,7 +15,12 @@ export type Visit = {
 }
 
 export type SiteData = {
-
+    id: number,
+    site: {
+        domain: string,
+        favicon?: string
+    },
+    visits: Visit[]
 }
 
 export function useSites() {
@@ -26,8 +31,8 @@ export function useSites() {
 }
 
 export function useSite(id: number) {
-    return useQuery({
+    return useQuery<SiteData>({
         queryKey: ['site', id],
-        queryFn: () => fetch('/api/sites/' + id)
+        queryFn: () => fetch('/api/sites/' + id).then(r => r.json())
     })
 }
