@@ -14,3 +14,7 @@ export function has(name: string) {
 export function get(name: string) {
     return all().get(name)
 }
+
+export function del(name: string) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+}

@@ -1,3 +1,4 @@
+import { reactive } from 'vue'
 import * as cookie from '../util/cookie'
 
 export function isAuthenticated() {
@@ -7,3 +8,5 @@ export function isAuthenticated() {
 export function getEmail() {
     return cookie.get('userEmail')
 }
+
+export const authState = reactive({ loggedIn: isAuthenticated() })

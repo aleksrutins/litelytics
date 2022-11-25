@@ -29,10 +29,12 @@ func authenticateRequest(c *fiber.Ctx, user *ent.User) {
 	c.Cookie(&fiber.Cookie{
 		Name:  "userId",
 		Value: fmt.Sprint(user.ID),
+		Path:  "/",
 	})
 	c.Cookie(&fiber.Cookie{
 		Name:  "userEmail",
 		Value: user.Email,
+		Path:  "/",
 	})
 }
 
