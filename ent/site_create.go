@@ -27,6 +27,20 @@ func (sc *SiteCreate) SetDomain(s string) *SiteCreate {
 	return sc
 }
 
+// SetFavicon sets the "favicon" field.
+func (sc *SiteCreate) SetFavicon(s string) *SiteCreate {
+	sc.mutation.SetFavicon(s)
+	return sc
+}
+
+// SetNillableFavicon sets the "favicon" field if the given value is not nil.
+func (sc *SiteCreate) SetNillableFavicon(s *string) *SiteCreate {
+	if s != nil {
+		sc.SetFavicon(*s)
+	}
+	return sc
+}
+
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (sc *SiteCreate) AddUserIDs(ids ...int) *SiteCreate {
 	sc.mutation.AddUserIDs(ids...)
@@ -166,6 +180,10 @@ func (sc *SiteCreate) createSpec() (*Site, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Domain(); ok {
 		_spec.SetField(site.FieldDomain, field.TypeString, value)
 		_node.Domain = value
+	}
+	if value, ok := sc.mutation.Favicon(); ok {
+		_spec.SetField(site.FieldFavicon, field.TypeString, value)
+		_node.Favicon = value
 	}
 	if nodes := sc.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -86,6 +86,13 @@ func Domain(v string) predicate.Site {
 	})
 }
 
+// Favicon applies equality check predicate on the "favicon" field. It's identical to FaviconEQ.
+func Favicon(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFavicon), v))
+	})
+}
+
 // DomainEQ applies the EQ predicate on the "domain" field.
 func DomainEQ(v string) predicate.Site {
 	return predicate.Site(func(s *sql.Selector) {
@@ -182,6 +189,119 @@ func DomainEqualFold(v string) predicate.Site {
 func DomainContainsFold(v string) predicate.Site {
 	return predicate.Site(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldDomain), v))
+	})
+}
+
+// FaviconEQ applies the EQ predicate on the "favicon" field.
+func FaviconEQ(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconNEQ applies the NEQ predicate on the "favicon" field.
+func FaviconNEQ(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconIn applies the In predicate on the "favicon" field.
+func FaviconIn(vs ...string) predicate.Site {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldFavicon), v...))
+	})
+}
+
+// FaviconNotIn applies the NotIn predicate on the "favicon" field.
+func FaviconNotIn(vs ...string) predicate.Site {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldFavicon), v...))
+	})
+}
+
+// FaviconGT applies the GT predicate on the "favicon" field.
+func FaviconGT(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconGTE applies the GTE predicate on the "favicon" field.
+func FaviconGTE(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconLT applies the LT predicate on the "favicon" field.
+func FaviconLT(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconLTE applies the LTE predicate on the "favicon" field.
+func FaviconLTE(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconContains applies the Contains predicate on the "favicon" field.
+func FaviconContains(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconHasPrefix applies the HasPrefix predicate on the "favicon" field.
+func FaviconHasPrefix(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconHasSuffix applies the HasSuffix predicate on the "favicon" field.
+func FaviconHasSuffix(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconIsNil applies the IsNil predicate on the "favicon" field.
+func FaviconIsNil() predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldFavicon)))
+	})
+}
+
+// FaviconNotNil applies the NotNil predicate on the "favicon" field.
+func FaviconNotNil() predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldFavicon)))
+	})
+}
+
+// FaviconEqualFold applies the EqualFold predicate on the "favicon" field.
+func FaviconEqualFold(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldFavicon), v))
+	})
+}
+
+// FaviconContainsFold applies the ContainsFold predicate on the "favicon" field.
+func FaviconContainsFold(v string) predicate.Site {
+	return predicate.Site(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldFavicon), v))
 	})
 }
 

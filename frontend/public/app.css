@@ -25,6 +25,7 @@ body {
 .dashboard-page_nav {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 .dashboard-page_nav a {
     text-decoration: none;

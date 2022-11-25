@@ -15,6 +15,7 @@ type Site struct {
 func (Site) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("domain").Unique(),
+		field.String("favicon").Optional(),
 	}
 }
 

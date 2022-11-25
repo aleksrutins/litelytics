@@ -17,6 +17,8 @@ type Site struct {
 	ID int `json:"id,omitempty"`
 	// Domain holds the value of the "domain" field.
 	Domain string `json:"domain,omitempty"`
+	// Favicon holds the value of the "favicon" field.
+	Favicon string `json:"favicon,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SiteQuery when eager-loading is set.
 	Edges SiteEdges `json:"edges"`
@@ -58,7 +60,7 @@ func (*Site) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case site.FieldID:
 			values[i] = new(sql.NullInt64)
-		case site.FieldDomain:
+		case site.FieldDomain, site.FieldFavicon:
 			values[i] = new(sql.NullString)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Site", columns[i])
@@ -86,6 +88,12 @@ func (s *Site) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field domain", values[i])
 			} else if value.Valid {
 				s.Domain = value.String
+			}
+		case site.FieldFavicon:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon", values[i])
+			} else if value.Valid {
+				s.Favicon = value.String
 			}
 		}
 	}
@@ -127,6 +135,9 @@ func (s *Site) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
 	builder.WriteString("domain=")
 	builder.WriteString(s.Domain)
+	builder.WriteString(", ")
+	builder.WriteString("favicon=")
+	builder.WriteString(s.Favicon)
 	builder.WriteByte(')')
 	return builder.String()
 }

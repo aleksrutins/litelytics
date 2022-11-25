@@ -9,6 +9,8 @@ const (
 	FieldID = "id"
 	// FieldDomain holds the string denoting the domain field in the database.
 	FieldDomain = "domain"
+	// FieldFavicon holds the string denoting the favicon field in the database.
+	FieldFavicon = "favicon"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeVisits holds the string denoting the visits edge name in mutations.
@@ -33,6 +35,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldDomain,
+	FieldFavicon,
 }
 
 var (

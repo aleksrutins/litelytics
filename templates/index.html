@@ -1,5 +1,17 @@
-{{$title := "Home"}}
-{{template "base_header" (headMeta "Home")}}
-{{template "dashboard_page" .}}
-<script type="module" src="/static/js/sites.js"></script>
-{{template "base_footer" .}}
+{{define "embedVue"}}
+<!doctype html>
+<html lang="en">
+    {{ $vue := . }}
+    <head>
+        <meta charset="utf-8">
+        <meta name="theme-color" content="#DC7E1F">
+        <title>Litelytics</title>
+        {{ if $vue }}
+            {{ $vue.RenderTags }}
+        {{ end }}
+    </head>
+    <body>
+        <div id="app"></div>
+    </body>
+</html>
+{{ end }}

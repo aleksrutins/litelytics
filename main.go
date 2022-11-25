@@ -1,8 +1,11 @@
 package main
 
 import (
+	"embed"
+	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/aleksrutins/litelytics/api"
 	"github.com/aleksrutins/litelytics/auth"
@@ -12,13 +15,46 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/template/html"
 	"github.com/profclems/go-dotenv"
+	vueglue "github.com/torenware/vite-go"
 )
+
+//go:embed "frontend"
+var frontend embed.FS
+
+var vueGlue *vueglue.VueGlue
 
 func main() {
 	err := dotenv.LoadConfig()
-
 	if err != nil {
 		log.Printf(".env could not be loaded: %v\n", err)
+	}
+
+	var viteConfig *vueglue.ViteConfig
+
+	if util.IsProduction() {
+		fmt.Println("Running in production.")
+		viteConfig = &vueglue.ViteConfig{
+			Environment: "production",
+			AssetsPath:  "dist",
+			EntryPoint:  "src/main.ts",
+			Platform:    "vue",
+			FS:          frontend,
+		}
+	} else {
+		fmt.Println("Running in development.")
+		viteConfig = &vueglue.ViteConfig{
+			Environment: "development",
+			AssetsPath:  "frontend",
+			EntryPoint:  "src/main.ts",
+			Platform:    "vue",
+			FS:          os.DirFS("frontend"),
+		}
+	}
+
+	vueGlue, err = vueglue.NewVueGlue(viteConfig)
+
+	if err != nil {
+		log.Fatalf("error initializing Vite: %v", err)
 	}
 
 	dbutil.Connect()
@@ -35,26 +71,27 @@ func main() {
 	})
 
 	app.Use(encryptcookie.New(encryptcookie.Config{
-		Key: dotenv.GetString("SECRET_KEY"),
+		Key:    dotenv.GetString("SECRET_KEY"),
+		Except: []string{"userEmail"},
 	}))
 
-	app.Static("/static", "./static")
+	fileServer, err := vueGlue.FileServer()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		if auth.GetUser(c) == nil {
-			c.Redirect("/auth/login")
-		}
-		return c.Render("index", util.CreateContext(c))
-	})
-	app.Get("/sites/:id", func(c *fiber.Ctx) error {
-		if auth.GetUser(c) == nil {
-			c.Redirect("/auth/login")
-		}
-		return c.Render("site_info", util.CreateContext(c))
-	})
+	if err != nil {
+		log.Fatalf("error creating static file server: %v", err)
+	}
 
 	app.Mount("/auth", auth.Routes)
 	app.Mount("/api", api.Routes)
+
+	app.Use(viteConfig.URLPrefix, util.WrapHandler(fileServer.ServeHTTP))
+
+	app.Get("/*", func(c *fiber.Ctx) error {
+		if strings.HasPrefix(c.Path(), "/auth") || strings.HasPrefix(c.Path(), "/api") {
+			return c.Next()
+		}
+		return c.Render("embedVue", vueGlue)
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {

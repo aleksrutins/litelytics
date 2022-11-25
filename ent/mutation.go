@@ -38,6 +38,7 @@ type SiteMutation struct {
 	typ           string
 	id            *int
 	domain        *string
+	favicon       *string
 	clearedFields map[string]struct{}
 	users         map[int]struct{}
 	removedusers  map[int]struct{}
@@ -184,6 +185,55 @@ func (m *SiteMutation) ResetDomain() {
 	m.domain = nil
 }
 
+// SetFavicon sets the "favicon" field.
+func (m *SiteMutation) SetFavicon(s string) {
+	m.favicon = &s
+}
+
+// Favicon returns the value of the "favicon" field in the mutation.
+func (m *SiteMutation) Favicon() (r string, exists bool) {
+	v := m.favicon
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFavicon returns the old "favicon" field's value of the Site entity.
+// If the Site object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SiteMutation) OldFavicon(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFavicon is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFavicon requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFavicon: %w", err)
+	}
+	return oldValue.Favicon, nil
+}
+
+// ClearFavicon clears the value of the "favicon" field.
+func (m *SiteMutation) ClearFavicon() {
+	m.favicon = nil
+	m.clearedFields[site.FieldFavicon] = struct{}{}
+}
+
+// FaviconCleared returns if the "favicon" field was cleared in this mutation.
+func (m *SiteMutation) FaviconCleared() bool {
+	_, ok := m.clearedFields[site.FieldFavicon]
+	return ok
+}
+
+// ResetFavicon resets all changes to the "favicon" field.
+func (m *SiteMutation) ResetFavicon() {
+	m.favicon = nil
+	delete(m.clearedFields, site.FieldFavicon)
+}
+
 // AddUserIDs adds the "users" edge to the User entity by ids.
 func (m *SiteMutation) AddUserIDs(ids ...int) {
 	if m.users == nil {
@@ -311,9 +361,12 @@ func (m *SiteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SiteMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.domain != nil {
 		fields = append(fields, site.FieldDomain)
+	}
+	if m.favicon != nil {
+		fields = append(fields, site.FieldFavicon)
 	}
 	return fields
 }
@@ -325,6 +378,8 @@ func (m *SiteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case site.FieldDomain:
 		return m.Domain()
+	case site.FieldFavicon:
+		return m.Favicon()
 	}
 	return nil, false
 }
@@ -336,6 +391,8 @@ func (m *SiteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case site.FieldDomain:
 		return m.OldDomain(ctx)
+	case site.FieldFavicon:
+		return m.OldFavicon(ctx)
 	}
 	return nil, fmt.Errorf("unknown Site field %s", name)
 }
@@ -351,6 +408,13 @@ func (m *SiteMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDomain(v)
+		return nil
+	case site.FieldFavicon:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFavicon(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Site field %s", name)
@@ -381,7 +445,11 @@ func (m *SiteMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *SiteMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(site.FieldFavicon) {
+		fields = append(fields, site.FieldFavicon)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -394,6 +462,11 @@ func (m *SiteMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *SiteMutation) ClearField(name string) error {
+	switch name {
+	case site.FieldFavicon:
+		m.ClearFavicon()
+		return nil
+	}
 	return fmt.Errorf("unknown Site nullable field %s", name)
 }
 
@@ -403,6 +476,9 @@ func (m *SiteMutation) ResetField(name string) error {
 	switch name {
 	case site.FieldDomain:
 		m.ResetDomain()
+		return nil
+	case site.FieldFavicon:
+		m.ResetFavicon()
 		return nil
 	}
 	return fmt.Errorf("unknown Site field %s", name)

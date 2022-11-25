@@ -12,6 +12,7 @@ var (
 	SitesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "domain", Type: field.TypeString, Unique: true},
+		{Name: "favicon", Type: field.TypeString, Nullable: true},
 	}
 	// SitesTable holds the schema information for the "sites" table.
 	SitesTable = &schema.Table{

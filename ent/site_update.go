@@ -35,6 +35,26 @@ func (su *SiteUpdate) SetDomain(s string) *SiteUpdate {
 	return su
 }
 
+// SetFavicon sets the "favicon" field.
+func (su *SiteUpdate) SetFavicon(s string) *SiteUpdate {
+	su.mutation.SetFavicon(s)
+	return su
+}
+
+// SetNillableFavicon sets the "favicon" field if the given value is not nil.
+func (su *SiteUpdate) SetNillableFavicon(s *string) *SiteUpdate {
+	if s != nil {
+		su.SetFavicon(*s)
+	}
+	return su
+}
+
+// ClearFavicon clears the value of the "favicon" field.
+func (su *SiteUpdate) ClearFavicon() *SiteUpdate {
+	su.mutation.ClearFavicon()
+	return su
+}
+
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (su *SiteUpdate) AddUserIDs(ids ...int) *SiteUpdate {
 	su.mutation.AddUserIDs(ids...)
@@ -187,6 +207,12 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.Domain(); ok {
 		_spec.SetField(site.FieldDomain, field.TypeString, value)
 	}
+	if value, ok := su.mutation.Favicon(); ok {
+		_spec.SetField(site.FieldFavicon, field.TypeString, value)
+	}
+	if su.mutation.FaviconCleared() {
+		_spec.ClearField(site.FieldFavicon, field.TypeString)
+	}
 	if su.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -317,6 +343,26 @@ type SiteUpdateOne struct {
 // SetDomain sets the "domain" field.
 func (suo *SiteUpdateOne) SetDomain(s string) *SiteUpdateOne {
 	suo.mutation.SetDomain(s)
+	return suo
+}
+
+// SetFavicon sets the "favicon" field.
+func (suo *SiteUpdateOne) SetFavicon(s string) *SiteUpdateOne {
+	suo.mutation.SetFavicon(s)
+	return suo
+}
+
+// SetNillableFavicon sets the "favicon" field if the given value is not nil.
+func (suo *SiteUpdateOne) SetNillableFavicon(s *string) *SiteUpdateOne {
+	if s != nil {
+		suo.SetFavicon(*s)
+	}
+	return suo
+}
+
+// ClearFavicon clears the value of the "favicon" field.
+func (suo *SiteUpdateOne) ClearFavicon() *SiteUpdateOne {
+	suo.mutation.ClearFavicon()
 	return suo
 }
 
@@ -501,6 +547,12 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if value, ok := suo.mutation.Domain(); ok {
 		_spec.SetField(site.FieldDomain, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.Favicon(); ok {
+		_spec.SetField(site.FieldFavicon, field.TypeString, value)
+	}
+	if suo.mutation.FaviconCleared() {
+		_spec.ClearField(site.FieldFavicon, field.TypeString)
 	}
 	if suo.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
