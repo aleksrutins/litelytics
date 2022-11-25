@@ -1,0 +1,10 @@
+providers = ["go"]
+
+[phases.setup]
+nixPkgs = ['...', 'nodejs']
+
+[phases.install]
+cmds = ['...', 'cd frontend && npm ci']
+
+[phases.build]
+cmds = ['...', 'cd frontend && npm run build']

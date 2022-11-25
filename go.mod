@@ -6,6 +6,10 @@ require (
 	entgo.io/ent v0.11.4
 	github.com/gofiber/fiber/v2 v2.40.0
 	github.com/gofiber/template v1.7.2
+	github.com/lib/pq v1.10.7
+	github.com/profclems/go-dotenv v0.1.2
+	github.com/torenware/vite-go v0.5.6
+	github.com/valyala/fasthttp v1.41.0
 )
 
 require (
@@ -19,17 +23,13 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.13.0 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
-	github.com/lib/pq v1.10.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
-	github.com/profclems/go-dotenv v0.1.2 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
-	github.com/torenware/vite-go v0.5.6 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.41.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
