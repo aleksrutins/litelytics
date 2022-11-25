@@ -9,6 +9,13 @@
         {{ if $vue }}
             {{ $vue.RenderTags }}
         {{ end }}
+        <style>
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: rgb(15 23 42);
+                }
+            }
+        </style>
     </head>
     <body>
         <div id="app"></div>
