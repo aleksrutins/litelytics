@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"strings"
@@ -33,12 +34,16 @@ func main() {
 
 	if util.IsProduction() {
 		fmt.Println("Running in production.")
+		frontendFS, err := fs.Sub(frontend, "frontend")
+		if err != nil {
+			log.Fatalf("Error opening embedded frontend FS: %v", err)
+		}
 		viteConfig = &vueglue.ViteConfig{
 			Environment: "production",
 			AssetsPath:  "dist",
 			EntryPoint:  "src/main.ts",
 			Platform:    "vue",
-			FS:          frontend,
+			FS:          frontendFS,
 		}
 	} else {
 		fmt.Println("Running in development.")
