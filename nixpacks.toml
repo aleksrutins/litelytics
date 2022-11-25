@@ -7,4 +7,4 @@ nixPkgs = ['...', 'nodejs']
 cmds = ['...', 'cd frontend && npm ci']
 
 [phases.build]
-cmds = ['...', 'cd frontend && npm run build']
+cmds = ['cd frontend && npm run build', '...']
