@@ -13,6 +13,7 @@ import (
 	"github.com/aleksrutins/litelytics/dbutil"
 	"github.com/aleksrutins/litelytics/util"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/template/html"
 	"github.com/profclems/go-dotenv"
@@ -89,6 +90,9 @@ func main() {
 
 	app.Mount("/auth", auth.Routes)
 	app.Mount("/api", api.Routes)
+
+	app.Use("/api/track", cors.New(cors.Config{AllowMethods: "POST"}))
+	app.Use("/simpleclient.js", cors.New(cors.Config{AllowMethods: "GET"}))
 
 	app.Use(viteConfig.URLPrefix, util.WrapHandler(fileServer.ServeHTTP))
 	if !util.IsProduction() {
