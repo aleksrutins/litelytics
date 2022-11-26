@@ -72,7 +72,8 @@ func main() {
 	})
 
 	app := fiber.New(fiber.Config{
-		Views: templates,
+		Views:                   templates,
+		EnableTrustedProxyCheck: util.IsProduction(),
 	})
 
 	app.Use(encryptcookie.New(encryptcookie.Config{
@@ -90,6 +91,9 @@ func main() {
 	app.Mount("/api", api.Routes)
 
 	app.Use(viteConfig.URLPrefix, util.WrapHandler(fileServer.ServeHTTP))
+	if !util.IsProduction() {
+		app.Static("/", "frontend/public")
+	}
 
 	app.Get("/*", func(c *fiber.Ctx) error {
 		if strings.HasPrefix(c.Path(), "/auth") || strings.HasPrefix(c.Path(), "/api") {

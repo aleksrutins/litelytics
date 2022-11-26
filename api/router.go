@@ -7,5 +7,6 @@ var Routes = fiber.New()
 func init() {
 	Routes.
 		Get("/sites", sites).
-		Get("/sites/:id", siteData)
+		Get("/sites/:id", siteData).
+		Post("/track", track)
 }

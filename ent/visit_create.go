@@ -27,9 +27,9 @@ func (vc *VisitCreate) SetPath(s string) *VisitCreate {
 	return vc
 }
 
-// SetReferer sets the "referer" field.
-func (vc *VisitCreate) SetReferer(s string) *VisitCreate {
-	vc.mutation.SetReferer(s)
+// SetReferrer sets the "referrer" field.
+func (vc *VisitCreate) SetReferrer(s string) *VisitCreate {
+	vc.mutation.SetReferrer(s)
 	return vc
 }
 
@@ -135,8 +135,8 @@ func (vc *VisitCreate) check() error {
 	if _, ok := vc.mutation.Path(); !ok {
 		return &ValidationError{Name: "path", err: errors.New(`ent: missing required field "Visit.path"`)}
 	}
-	if _, ok := vc.mutation.Referer(); !ok {
-		return &ValidationError{Name: "referer", err: errors.New(`ent: missing required field "Visit.referer"`)}
+	if _, ok := vc.mutation.Referrer(); !ok {
+		return &ValidationError{Name: "referrer", err: errors.New(`ent: missing required field "Visit.referrer"`)}
 	}
 	if _, ok := vc.mutation.Timestamp(); !ok {
 		return &ValidationError{Name: "timestamp", err: errors.New(`ent: missing required field "Visit.timestamp"`)}
@@ -178,9 +178,9 @@ func (vc *VisitCreate) createSpec() (*Visit, *sqlgraph.CreateSpec) {
 		_spec.SetField(visit.FieldPath, field.TypeString, value)
 		_node.Path = value
 	}
-	if value, ok := vc.mutation.Referer(); ok {
-		_spec.SetField(visit.FieldReferer, field.TypeString, value)
-		_node.Referer = value
+	if value, ok := vc.mutation.Referrer(); ok {
+		_spec.SetField(visit.FieldReferrer, field.TypeString, value)
+		_node.Referrer = value
 	}
 	if value, ok := vc.mutation.Timestamp(); ok {
 		_spec.SetField(visit.FieldTimestamp, field.TypeTime, value)

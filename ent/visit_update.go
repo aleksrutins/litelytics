@@ -35,9 +35,9 @@ func (vu *VisitUpdate) SetPath(s string) *VisitUpdate {
 	return vu
 }
 
-// SetReferer sets the "referer" field.
-func (vu *VisitUpdate) SetReferer(s string) *VisitUpdate {
-	vu.mutation.SetReferer(s)
+// SetReferrer sets the "referrer" field.
+func (vu *VisitUpdate) SetReferrer(s string) *VisitUpdate {
+	vu.mutation.SetReferrer(s)
 	return vu
 }
 
@@ -164,8 +164,8 @@ func (vu *VisitUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := vu.mutation.Path(); ok {
 		_spec.SetField(visit.FieldPath, field.TypeString, value)
 	}
-	if value, ok := vu.mutation.Referer(); ok {
-		_spec.SetField(visit.FieldReferer, field.TypeString, value)
+	if value, ok := vu.mutation.Referrer(); ok {
+		_spec.SetField(visit.FieldReferrer, field.TypeString, value)
 	}
 	if value, ok := vu.mutation.Timestamp(); ok {
 		_spec.SetField(visit.FieldTimestamp, field.TypeTime, value)
@@ -233,9 +233,9 @@ func (vuo *VisitUpdateOne) SetPath(s string) *VisitUpdateOne {
 	return vuo
 }
 
-// SetReferer sets the "referer" field.
-func (vuo *VisitUpdateOne) SetReferer(s string) *VisitUpdateOne {
-	vuo.mutation.SetReferer(s)
+// SetReferrer sets the "referrer" field.
+func (vuo *VisitUpdateOne) SetReferrer(s string) *VisitUpdateOne {
+	vuo.mutation.SetReferrer(s)
 	return vuo
 }
 
@@ -392,8 +392,8 @@ func (vuo *VisitUpdateOne) sqlSave(ctx context.Context) (_node *Visit, err error
 	if value, ok := vuo.mutation.Path(); ok {
 		_spec.SetField(visit.FieldPath, field.TypeString, value)
 	}
-	if value, ok := vuo.mutation.Referer(); ok {
-		_spec.SetField(visit.FieldReferer, field.TypeString, value)
+	if value, ok := vuo.mutation.Referrer(); ok {
+		_spec.SetField(visit.FieldReferrer, field.TypeString, value)
 	}
 	if value, ok := vuo.mutation.Timestamp(); ok {
 		_spec.SetField(visit.FieldTimestamp, field.TypeTime, value)

@@ -15,7 +15,7 @@ type Visit struct {
 func (Visit) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("path"),
-		field.String("referer"),
+		field.String("referrer"),
 		field.Time("timestamp"),
 		field.String("ip"),
 	}

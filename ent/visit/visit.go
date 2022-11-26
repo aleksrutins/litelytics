@@ -9,8 +9,8 @@ const (
 	FieldID = "id"
 	// FieldPath holds the string denoting the path field in the database.
 	FieldPath = "path"
-	// FieldReferer holds the string denoting the referer field in the database.
-	FieldReferer = "referer"
+	// FieldReferrer holds the string denoting the referrer field in the database.
+	FieldReferrer = "referrer"
 	// FieldTimestamp holds the string denoting the timestamp field in the database.
 	FieldTimestamp = "timestamp"
 	// FieldIP holds the string denoting the ip field in the database.
@@ -32,7 +32,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldPath,
-	FieldReferer,
+	FieldReferrer,
 	FieldTimestamp,
 	FieldIP,
 }

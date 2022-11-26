@@ -1,2 +1,6 @@
 .env
 __debug_bin
+
+# Added by cargo
+
+/target

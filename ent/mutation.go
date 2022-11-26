@@ -1059,7 +1059,7 @@ type VisitMutation struct {
 	typ           string
 	id            *int
 	_path         *string
-	referer       *string
+	referrer      *string
 	timestamp     *time.Time
 	ip            *string
 	clearedFields map[string]struct{}
@@ -1204,40 +1204,40 @@ func (m *VisitMutation) ResetPath() {
 	m._path = nil
 }
 
-// SetReferer sets the "referer" field.
-func (m *VisitMutation) SetReferer(s string) {
-	m.referer = &s
+// SetReferrer sets the "referrer" field.
+func (m *VisitMutation) SetReferrer(s string) {
+	m.referrer = &s
 }
 
-// Referer returns the value of the "referer" field in the mutation.
-func (m *VisitMutation) Referer() (r string, exists bool) {
-	v := m.referer
+// Referrer returns the value of the "referrer" field in the mutation.
+func (m *VisitMutation) Referrer() (r string, exists bool) {
+	v := m.referrer
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldReferer returns the old "referer" field's value of the Visit entity.
+// OldReferrer returns the old "referrer" field's value of the Visit entity.
 // If the Visit object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VisitMutation) OldReferer(ctx context.Context) (v string, err error) {
+func (m *VisitMutation) OldReferrer(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldReferer is only allowed on UpdateOne operations")
+		return v, errors.New("OldReferrer is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldReferer requires an ID field in the mutation")
+		return v, errors.New("OldReferrer requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldReferer: %w", err)
+		return v, fmt.Errorf("querying old value for OldReferrer: %w", err)
 	}
-	return oldValue.Referer, nil
+	return oldValue.Referrer, nil
 }
 
-// ResetReferer resets all changes to the "referer" field.
-func (m *VisitMutation) ResetReferer() {
-	m.referer = nil
+// ResetReferrer resets all changes to the "referrer" field.
+func (m *VisitMutation) ResetReferrer() {
+	m.referrer = nil
 }
 
 // SetTimestamp sets the "timestamp" field.
@@ -1374,8 +1374,8 @@ func (m *VisitMutation) Fields() []string {
 	if m._path != nil {
 		fields = append(fields, visit.FieldPath)
 	}
-	if m.referer != nil {
-		fields = append(fields, visit.FieldReferer)
+	if m.referrer != nil {
+		fields = append(fields, visit.FieldReferrer)
 	}
 	if m.timestamp != nil {
 		fields = append(fields, visit.FieldTimestamp)
@@ -1393,8 +1393,8 @@ func (m *VisitMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case visit.FieldPath:
 		return m.Path()
-	case visit.FieldReferer:
-		return m.Referer()
+	case visit.FieldReferrer:
+		return m.Referrer()
 	case visit.FieldTimestamp:
 		return m.Timestamp()
 	case visit.FieldIP:
@@ -1410,8 +1410,8 @@ func (m *VisitMutation) OldField(ctx context.Context, name string) (ent.Value, e
 	switch name {
 	case visit.FieldPath:
 		return m.OldPath(ctx)
-	case visit.FieldReferer:
-		return m.OldReferer(ctx)
+	case visit.FieldReferrer:
+		return m.OldReferrer(ctx)
 	case visit.FieldTimestamp:
 		return m.OldTimestamp(ctx)
 	case visit.FieldIP:
@@ -1432,12 +1432,12 @@ func (m *VisitMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPath(v)
 		return nil
-	case visit.FieldReferer:
+	case visit.FieldReferrer:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetReferer(v)
+		m.SetReferrer(v)
 		return nil
 	case visit.FieldTimestamp:
 		v, ok := value.(time.Time)
@@ -1505,8 +1505,8 @@ func (m *VisitMutation) ResetField(name string) error {
 	case visit.FieldPath:
 		m.ResetPath()
 		return nil
-	case visit.FieldReferer:
-		m.ResetReferer()
+	case visit.FieldReferrer:
+		m.ResetReferrer()
 		return nil
 	case visit.FieldTimestamp:
 		m.ResetTimestamp()

@@ -36,7 +36,7 @@ var (
 	VisitsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "path", Type: field.TypeString},
-		{Name: "referer", Type: field.TypeString},
+		{Name: "referrer", Type: field.TypeString},
 		{Name: "timestamp", Type: field.TypeTime},
 		{Name: "ip", Type: field.TypeString},
 		{Name: "site_visits", Type: field.TypeInt},

@@ -88,10 +88,10 @@ func Path(v string) predicate.Visit {
 	})
 }
 
-// Referer applies equality check predicate on the "referer" field. It's identical to RefererEQ.
-func Referer(v string) predicate.Visit {
+// Referrer applies equality check predicate on the "referrer" field. It's identical to ReferrerEQ.
+func Referrer(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferer), v))
+		s.Where(sql.EQ(s.C(FieldReferrer), v))
 	})
 }
 
@@ -208,102 +208,102 @@ func PathContainsFold(v string) predicate.Visit {
 	})
 }
 
-// RefererEQ applies the EQ predicate on the "referer" field.
-func RefererEQ(v string) predicate.Visit {
+// ReferrerEQ applies the EQ predicate on the "referrer" field.
+func ReferrerEQ(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferer), v))
+		s.Where(sql.EQ(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererNEQ applies the NEQ predicate on the "referer" field.
-func RefererNEQ(v string) predicate.Visit {
+// ReferrerNEQ applies the NEQ predicate on the "referrer" field.
+func ReferrerNEQ(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldReferer), v))
+		s.Where(sql.NEQ(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererIn applies the In predicate on the "referer" field.
-func RefererIn(vs ...string) predicate.Visit {
+// ReferrerIn applies the In predicate on the "referrer" field.
+func ReferrerIn(vs ...string) predicate.Visit {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldReferer), v...))
+		s.Where(sql.In(s.C(FieldReferrer), v...))
 	})
 }
 
-// RefererNotIn applies the NotIn predicate on the "referer" field.
-func RefererNotIn(vs ...string) predicate.Visit {
+// ReferrerNotIn applies the NotIn predicate on the "referrer" field.
+func ReferrerNotIn(vs ...string) predicate.Visit {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldReferer), v...))
+		s.Where(sql.NotIn(s.C(FieldReferrer), v...))
 	})
 }
 
-// RefererGT applies the GT predicate on the "referer" field.
-func RefererGT(v string) predicate.Visit {
+// ReferrerGT applies the GT predicate on the "referrer" field.
+func ReferrerGT(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldReferer), v))
+		s.Where(sql.GT(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererGTE applies the GTE predicate on the "referer" field.
-func RefererGTE(v string) predicate.Visit {
+// ReferrerGTE applies the GTE predicate on the "referrer" field.
+func ReferrerGTE(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldReferer), v))
+		s.Where(sql.GTE(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererLT applies the LT predicate on the "referer" field.
-func RefererLT(v string) predicate.Visit {
+// ReferrerLT applies the LT predicate on the "referrer" field.
+func ReferrerLT(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldReferer), v))
+		s.Where(sql.LT(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererLTE applies the LTE predicate on the "referer" field.
-func RefererLTE(v string) predicate.Visit {
+// ReferrerLTE applies the LTE predicate on the "referrer" field.
+func ReferrerLTE(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldReferer), v))
+		s.Where(sql.LTE(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererContains applies the Contains predicate on the "referer" field.
-func RefererContains(v string) predicate.Visit {
+// ReferrerContains applies the Contains predicate on the "referrer" field.
+func ReferrerContains(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldReferer), v))
+		s.Where(sql.Contains(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererHasPrefix applies the HasPrefix predicate on the "referer" field.
-func RefererHasPrefix(v string) predicate.Visit {
+// ReferrerHasPrefix applies the HasPrefix predicate on the "referrer" field.
+func ReferrerHasPrefix(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldReferer), v))
+		s.Where(sql.HasPrefix(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererHasSuffix applies the HasSuffix predicate on the "referer" field.
-func RefererHasSuffix(v string) predicate.Visit {
+// ReferrerHasSuffix applies the HasSuffix predicate on the "referrer" field.
+func ReferrerHasSuffix(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldReferer), v))
+		s.Where(sql.HasSuffix(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererEqualFold applies the EqualFold predicate on the "referer" field.
-func RefererEqualFold(v string) predicate.Visit {
+// ReferrerEqualFold applies the EqualFold predicate on the "referrer" field.
+func ReferrerEqualFold(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldReferer), v))
+		s.Where(sql.EqualFold(s.C(FieldReferrer), v))
 	})
 }
 
-// RefererContainsFold applies the ContainsFold predicate on the "referer" field.
-func RefererContainsFold(v string) predicate.Visit {
+// ReferrerContainsFold applies the ContainsFold predicate on the "referrer" field.
+func ReferrerContainsFold(v string) predicate.Visit {
 	return predicate.Visit(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldReferer), v))
+		s.Where(sql.ContainsFold(s.C(FieldReferrer), v))
 	})
 }
 

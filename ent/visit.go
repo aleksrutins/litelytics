@@ -19,8 +19,8 @@ type Visit struct {
 	ID int `json:"id,omitempty"`
 	// Path holds the value of the "path" field.
 	Path string `json:"path,omitempty"`
-	// Referer holds the value of the "referer" field.
-	Referer string `json:"referer,omitempty"`
+	// Referrer holds the value of the "referrer" field.
+	Referrer string `json:"referrer,omitempty"`
 	// Timestamp holds the value of the "timestamp" field.
 	Timestamp time.Time `json:"timestamp,omitempty"`
 	// IP holds the value of the "ip" field.
@@ -60,7 +60,7 @@ func (*Visit) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case visit.FieldID:
 			values[i] = new(sql.NullInt64)
-		case visit.FieldPath, visit.FieldReferer, visit.FieldIP:
+		case visit.FieldPath, visit.FieldReferrer, visit.FieldIP:
 			values[i] = new(sql.NullString)
 		case visit.FieldTimestamp:
 			values[i] = new(sql.NullTime)
@@ -93,11 +93,11 @@ func (v *Visit) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				v.Path = value.String
 			}
-		case visit.FieldReferer:
+		case visit.FieldReferrer:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field referer", values[i])
+				return fmt.Errorf("unexpected type %T for field referrer", values[i])
 			} else if value.Valid {
-				v.Referer = value.String
+				v.Referrer = value.String
 			}
 		case visit.FieldTimestamp:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -154,8 +154,8 @@ func (v *Visit) String() string {
 	builder.WriteString("path=")
 	builder.WriteString(v.Path)
 	builder.WriteString(", ")
-	builder.WriteString("referer=")
-	builder.WriteString(v.Referer)
+	builder.WriteString("referrer=")
+	builder.WriteString(v.Referrer)
 	builder.WriteString(", ")
 	builder.WriteString("timestamp=")
 	builder.WriteString(v.Timestamp.Format(time.ANSIC))
