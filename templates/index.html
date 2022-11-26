@@ -6,9 +6,6 @@
         <meta charset="utf-8">
         <meta name="theme-color" content="#7ff4b0">
         <title>Litelytics</title>
-        {{ if $vue }}
-            {{ $vue.RenderTags }}
-        {{ end }}
         <style>
             @media (prefers-color-scheme: dark) {
                 body {
@@ -19,6 +16,9 @@
     </head>
     <body>
         <div id="app"></div>
+        {{ if $vue }}
+            {{ $vue.RenderTags }}
+        {{ end }}
     </body>
 </html>
 {{ end }}
