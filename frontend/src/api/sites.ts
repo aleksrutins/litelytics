@@ -11,7 +11,7 @@ export type Visit = {
     id: number,
     path: string,
     referrer: string,
-    timestamp: Date,
+    timestamp: string,
     ip: String
 }
 

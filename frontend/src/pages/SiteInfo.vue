@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="visit in site.data.value.visits">
-                        <td>{{visit.timestamp.toString()}}</td>
+                        <td><time :datetime="visit.timestamp">{{new Date(visit.timestamp).toLocaleString()}}</time></td>
                         <td>{{visit.path}}</td>
                         <td>{{visit.referrer}}</td>
                         <td>{{visit.ip}}</td>
