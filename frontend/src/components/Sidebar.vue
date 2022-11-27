@@ -5,7 +5,7 @@
     import { useRouter } from 'vue-router';
 
     const sites = useSites()
-    const linkStyle = "rounded hover:bg-emerald-500 dark:hover:bg-emerald-800 px-3 py-2 transition"
+    const linkStyle = "rounded hover:bg-emerald-500 mb-[1px] dark:hover:bg-emerald-800 px-3 py-2 transition"
     const activeLinkStyle = "bg-primary-dark dark:bg-emerald-900"
     const sectionHeaderStyle = "font-bold uppercase text-xs text-gray-800 dark:text-slate-200 mx-3 pt-2"
     const router = useRouter()
