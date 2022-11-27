@@ -96,7 +96,21 @@ func main() {
 
 	app.Use(viteConfig.URLPrefix, util.WrapHandler(fileServer.ServeHTTP))
 	if !util.IsProduction() {
-		app.Static("/", "frontend/public")
+		app.Get("/simpleclient.js", func(c *fiber.Ctx) error {
+			c.Response().Header.Set("Content-Type", "text/javascript")
+			c.SendFile("frontend/public/simpleclient.js")
+			return nil
+		})
+	} else {
+		app.Get("/simpleclient.js", func(c *fiber.Ctx) error {
+			c.Response().Header.Set("Content-Type", "text/javascript")
+			content, err := frontend.ReadFile("frontend/public/simpleclient.js")
+			if err != nil {
+				return err
+			}
+			c.Send(content)
+			return nil
+		})
 	}
 
 	app.Get("/*", func(c *fiber.Ctx) error {

@@ -10,7 +10,7 @@ export type SiteInfo = {
 export type Visit = {
     id: number,
     path: string,
-    referer: string,
+    referrer: string,
     timestamp: Date,
     ip: String
 }
