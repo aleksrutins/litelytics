@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
     import { useSite } from '../api/sites';
-import GeneratedIcon from '../components/GeneratedIcon.vue';
+    import GeneratedIcon from '../components/GeneratedIcon.vue';
 
     const route = useRoute()
     const site = useSite(parseInt(route.params.id as string))
