@@ -7,13 +7,13 @@
     const site = useSite(parseInt(route.params.id as string))
 </script>
 <template>
-    <div class="p-3">
+    <div class="p-3 max-h-screen flex">
         <div v-if="site.data.value" class="w-full flex items-center flex-col">
             <img v-if="site.data.value?.site.favicon" :src="site.data.value.site.favicon" class="rounded-full block" width="100"/>
             <GeneratedIcon size="100px" v-else/>
             <h1 class="text-xl pt-2">{{site.data.value?.site.domain}}</h1>
-            <table>
-                <thead>
+            <table class="shadow rounded-lg table-auto border-separate border overflow-auto block border-spacing-0 border-slate-300">
+                <thead class="sticky top-0 backdrop-blur bg-slate-200/70 border-slate-300 border-b shadow">
                     <tr>
                         <th>Timestamp</th>
                         <th>Path</th>
@@ -37,3 +37,34 @@
         </div>
     </div>
 </template>
+
+<style>
+thead, thead tr:first-of-type {
+    border-top-left-radius: 00.5rem;
+    border-top-right-radius: 00.5rem;
+}
+td, th {
+    padding: 6px;
+}
+
+th {
+    @apply text-slate-700;
+}
+
+tbody tr:not(:last-of-type) td {
+    @apply border-b border-slate-100;
+}
+/* https://stackoverflow.com/a/47318412 */
+th:first-of-type {
+  border-top-left-radius: 0.5rem;
+}
+th:last-of-type {
+  border-top-right-radius: 0.5rem;
+}
+tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 0.5rem;
+}
+tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 0.5rem;
+}
+</style>
