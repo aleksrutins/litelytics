@@ -13,7 +13,7 @@
             <GeneratedIcon size="100px" v-else/>
             <h1 class="text-xl pt-2">{{site.data.value?.site.domain}}</h1>
             <table class="shadow rounded-lg table-auto border-separate border overflow-auto block border-spacing-0 border-slate-300">
-                <thead class="sticky top-0 backdrop-blur bg-slate-200/70 border-slate-300 border-b shadow">
+                <thead class="sticky top-0 bg-slate-200 border-slate-200 border-b shadow shadow-slate-100">
                     <tr>
                         <th>Timestamp</th>
                         <th>Path</th>
