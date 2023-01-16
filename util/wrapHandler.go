@@ -9,9 +9,9 @@ import (
 
 // https://github.com/gofiber/fiber/issues/299
 
-func WrapHandler(f func(http.ResponseWriter, *http.Request)) func(ctx *fiber.Ctx) error {
+func WrapHandler(f http.Handler) func(ctx *fiber.Ctx) error {
 	return func(ctx *fiber.Ctx) error {
-		fasthttpadaptor.NewFastHTTPHandler(http.HandlerFunc(f))(ctx.Context())
+		fasthttpadaptor.NewFastHTTPHandler(f)(ctx.Context())
 		return nil
 	}
 }

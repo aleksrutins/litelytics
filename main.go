@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 
+	"github.com/NYTimes/gziphandler"
 	"github.com/aleksrutins/litelytics/api"
 	"github.com/aleksrutins/litelytics/auth"
 	"github.com/aleksrutins/litelytics/dbutil"
@@ -94,7 +96,7 @@ func main() {
 	app.Use("/api/track", cors.New(cors.Config{AllowMethods: "POST"}))
 	app.Use("/simpleclient.js", cors.New(cors.Config{AllowMethods: "GET"}))
 
-	app.Use(viteConfig.URLPrefix, util.WrapHandler(fileServer.ServeHTTP))
+	app.Use(viteConfig.URLPrefix, util.WrapHandler(gziphandler.GzipHandler(http.HandlerFunc(fileServer.ServeHTTP))))
 	if !util.IsProduction() {
 		app.Get("/simpleclient.js", func(c *fiber.Ctx) error {
 			c.Response().Header.Set("Content-Type", "text/javascript")
