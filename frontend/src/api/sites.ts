@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/vue-query"
+import { createQuery } from "@tanstack/svelte-query"
 import { getEmail } from "./auth"
 
 export type SiteInfo = {
@@ -25,14 +25,14 @@ export type SiteData = {
 }
 
 export function useSites() {
-    return useQuery<SiteInfo[]>({
+    return createQuery<SiteInfo[]>({
         queryKey: ['sites', { user: getEmail() }],
         queryFn: () => fetch('/api/sites').then(r => r.json())
     })
 }
 
 export function useSite(id: number) {
-    return useQuery<SiteData>({
+    return createQuery<SiteData>({
         queryKey: ['site', id, { user: getEmail() }],
         queryFn: () => fetch('/api/sites/' + id).then(r => r.json())
     })
