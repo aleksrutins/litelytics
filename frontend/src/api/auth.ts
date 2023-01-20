@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { writable } from 'svelte/store'
 import * as cookie from '../util/cookie'
 
 function isEmail(str: string) {
@@ -14,4 +14,4 @@ export function getEmail() {
     return cookie.get('userEmail')
 }
 
-export const authState = reactive({ loggedIn: isAuthenticated() })
+export const authState = writable(isAuthenticated());
