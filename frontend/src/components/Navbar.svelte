@@ -1,15 +1,25 @@
 <script lang="ts">
-    import { createLink, Link } from "@bjornlu/svelte-router"
-    import { getEmail } from "../api/auth";
+    import { active } from "tinro"
+    import { getEmail, isAuthenticated, authState } from "../api/auth"
+    import logo from '../assets/logo.webp'
+    import * as cookie from '../util/cookie'
 
-    const home = createLink("/");
+    function logOut() {
+        cookie.del('userId')
+        cookie.del('userEmail')
+        authState.set(false)
+    }
 </script>
-<div class="border-b flex flex-row content-between">
-    <div>
-        <img src="../assets/logo.webp" alt="Litelytics logo" width="100" class="self-center dark:invert"/>
-        <Link to="/" class={($home.isExactActive ? "bg-slate-300" : "") + "rounded-sm hover:bg-slate-400"}>Home</Link>
+<div class="border-b dark:border-slate-800 flex flex-row justify-between items-center font-stylized">
+    <div class="flex flex-row items-center">
+        <img src={logo} alt="Litelytics logo" width="50" class="self-center dark:invert"/>
+        <a href="/" class="nav-link" use:active exact>Home</a>
     </div>
-    <div>
-        {getEmail()}
+    <div class="pr-3">
+        {#if isAuthenticated()}
+        <button class="cursor-pointer" on:click={logOut}>Log Out {getEmail()}</button>
+        {:else}
+        Not signed in
+        {/if}
     </div>
 </div>

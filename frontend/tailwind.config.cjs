@@ -10,6 +10,9 @@ module.exports = {
           light: '#7ff4b0',
           dark: '#49c17b'
         }
+      },
+      fontFamily: {
+        stylized: 'Space Grotesk'
       }
     },
   },
