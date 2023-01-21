@@ -1,75 +1,61 @@
 <script lang="ts">
-    import { SiteInfo, useSite } from '../api/sites';
-    import GeneratedIcon from '../components/GeneratedIcon.svelte';
-    export let siteId: number
+    import { SiteInfo, useSite } from "../api/sites";
+    import VisitsTable from "../components/data-display/VisitsTable.svelte";
+    import GeneratedIcon from "../components/GeneratedIcon.svelte";
+    export let siteId: number;
     let site = useSite(siteId);
+
+    let displays = new Map([["Table", [VisitsTable]]]);
+    let currentDisplayName = "Table";
+    $: currentDisplay = displays.get(currentDisplayName)!;
+
+    function setDisplay(ev: MouseEvent) {
+        currentDisplayName = (<Node>ev.target).textContent!
+    }
 </script>
-<div class="p-3 max-h-screen flex">
+
+<div class="h-full flex">
     {#if $site.data}
-    
-    <div class="w-full flex items-center flex-col">
-        {#if $site.data.site.favicon}
-        <img src={$site.data.site.favicon} class="rounded-full block" width="100" alt={$site.data.site.domain}/>
-        {:else}
-        <GeneratedIcon size="100px" />
-        {/if}
-        <h1 class="text-xl pt-2">{$site.data.site.domain}</h1>
-        <table class="shadow rounded-lg table-auto border-separate border overflow-auto block border-spacing-0 border-slate-300">
-            <thead class="sticky top-0 bg-slate-200 border-slate-200 border-b shadow shadow-slate-100">
-                <tr>
-                    <th>Timestamp</th>
-                    <th>Path</th>
-                    <th>Referer</th>
-                    <th>Client IP</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each $site.data.visits as visit}
-                <tr>
-                    <td><time datetime={visit.timestamp}>{new Date(visit.timestamp).toLocaleString()}</time></td>
-                    <td>{visit.path}</td>
-                    <td>{visit.referrer}</td>
-                    <td>{visit.ip}</td>
-                </tr>
+        <div class="w-full h-full flex flex-row items-center">
+            <div class="flex flex-col p-2 border-r dark:border-gray-800 m-0 h-full">
+                <div class="flex flex-shrink flex-row">
+                    {#if $site.data.site.favicon}
+                        <img
+                            src={$site.data.site.favicon}
+                            class="rounded-full block align-middle"
+                            width="32"
+                            alt={$site.data.site.domain}
+                        />
+                    {:else}
+                        <GeneratedIcon size="32px" />
+                    {/if}
+                    <h1 class="font-stylized font-bold pl-2">
+                        {$site.data.site.domain}
+                    </h1>
+                </div>
+                {#each Array.from(displays.keys()) as name}
+                    <button class="block m-2 p-2 rounded text-start" class:bg-gray-100={currentDisplayName == name} class:dark:bg-gray-700={currentDisplayName == name} on:click={setDisplay}>{name}</button>
                 {/each}
-            </tbody>
-        </table>
-    </div>
+            </div>
+            <div class="flex flex-row items-start flex-wrap flex-grow p-3 overflow-auto h-full">
+                {#each currentDisplay as component}
+                    <div class="resize border dark:border-gray-800 rounded-md flex flex-col">
+                        <div class="border-b dark:border-gray-800 bg-gray-100 dark:bg-gray-900 rounded-t-md px-1 text-sm font-bold">
+                            {component.name}
+                        </div>
+                        <div class="p-2 w-[20rem] h-[20rem] flex">
+                            <svelte:component this={component} visits={$site.data.visits} />
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        </div>
     {:else}
-    <div class="w-full flex items-center flex-col animate-pulse">
-        <div class="rounded-full block w-[100px] h-[100px] bg-slate-200 dark:bg-slate-800"></div>
-        <div class="h-7 mt-2 w-60 rounded bg-slate-200 dark:bg-slate-800"></div>
-    </div>
+        <div class="w-full flex flex-row animate-pulse">
+            <div
+                class="rounded-full block w-[32px] h-[32px] bg-slate-200 dark:bg-slate-800"
+            />
+            <div class="h-7 ml-2 w-60 rounded bg-slate-200 dark:bg-slate-800" />
+        </div>
     {/if}
 </div>
-
-<style>
-thead, thead tr:first-of-type {
-    border-top-left-radius: 00.5rem;
-    border-top-right-radius: 00.5rem;
-}
-td, th {
-    padding: 6px;
-}
-
-th {
-    @apply text-slate-700;
-}
-
-tbody tr:not(:last-of-type) td {
-    @apply border-b border-slate-100;
-}
-/* https://stackoverflow.com/a/47318412 */
-th:first-of-type {
-  border-top-left-radius: 0.5rem;
-}
-th:last-of-type {
-  border-top-right-radius: 0.5rem;
-}
-tr:last-of-type td:first-of-type {
-  border-bottom-left-radius: 0.5rem;
-}
-tr:last-of-type td:last-of-type {
-  border-bottom-right-radius: 0.5rem;
-}
-</style>

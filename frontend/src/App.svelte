@@ -10,10 +10,10 @@
     const queryClient = new QueryClient()
 </script>
 
-<div class="dark:bg-slate-900 dark:text-white">
+<div class="dark:bg-slate-900 dark:text-white h-screen w-screen">
 <QueryClientProvider client={queryClient}>
     {#if $authState}
-    <div>
+    <div class="flex flex-col h-screen w-screen">
     <Navbar/>
     <Route path="/"><Home/></Route>
     <Route path="/sites/:id" let:meta><SiteInfo siteId={meta.params.id}/></Route>
