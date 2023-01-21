@@ -10,7 +10,7 @@
         authState.set(false)
     }
 </script>
-<div class="border-b dark:border-slate-800 flex flex-row justify-between items-center font-stylized">
+<div class="border-b bg-white/50 dark:bg-gray-900/50 backdrop-blur-md dark:border-slate-800 flex flex-row justify-between items-center font-stylized sticky top-0">
     <div class="flex flex-row items-center">
         <img src={logo} alt="Litelytics logo" width="50" class="self-center dark:invert"/>
         <a href="/" class="nav-link" use:active exact>Home</a>
