@@ -1,11 +1,19 @@
 <script lang="ts">
     import { SiteInfo, useSite } from "../api/sites";
+    import VisitsChart from "../components/data-display/VisitsChart.svelte";
     import VisitsTable from "../components/data-display/VisitsTable.svelte";
     import GeneratedIcon from "../components/GeneratedIcon.svelte";
     export let siteId: number;
     let site = useSite(siteId);
 
-    let displays = new Map([["Table", [VisitsTable]]]);
+    let displays = new Map<string, [ConstructorOfATypedSvelteComponent, string][]>([
+        ["Table", [
+            [VisitsTable, "Visits Table"]
+        ]],
+        ["Chart", [
+            [VisitsChart, "Visits Per Week"]
+        ]]
+    ]);
     let currentDisplayName = "Table";
     $: currentDisplay = displays.get(currentDisplayName)!;
 
@@ -41,10 +49,10 @@
                 {#each currentDisplay as component}
                     <div class="resize border dark:border-gray-800 rounded-md flex flex-col">
                         <div class="border-b dark:border-gray-800 bg-gray-100 dark:bg-gray-900 rounded-t-md px-1 text-sm font-bold">
-                            {component.name}
+                            {component[1]}
                         </div>
                         <div class="p-2 w-[20rem] h-[20rem] flex">
-                            <svelte:component this={component} visits={$site.data.visits} />
+                            <svelte:component this={component[0]} visits={$site.data.visits} />
                         </div>
                     </div>
                 {/each}

@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/svelte-query": "^4.22.2"
+    "@tanstack/svelte-query": "^4.22.2",
+    "@unovis/svelte": "^1.0.2",
+    "@unovis/ts": "^1.0.2"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
