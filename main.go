@@ -45,7 +45,7 @@ func main() {
 			Environment: "production",
 			AssetsPath:  "dist",
 			EntryPoint:  "src/main.ts",
-			Platform:    "vue",
+			Platform:    "svelte",
 			FS:          frontendFS,
 		}
 	} else {
@@ -54,7 +54,7 @@ func main() {
 			Environment: "development",
 			AssetsPath:  "frontend",
 			EntryPoint:  "src/main.ts",
-			Platform:    "vue",
+			Platform:    "svelte",
 			FS:          os.DirFS("frontend"),
 		}
 	}
