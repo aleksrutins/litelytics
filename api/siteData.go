@@ -32,13 +32,17 @@ func siteData(c *fiber.Ctx) error {
 	}
 	siteInfo, err := dbutil.Client.Site.Query().
 		Where(site.IDEQ(intId)).
-		Where(site.HasUsersWith(user.IDEQ(currentUser.ID))).First(c.Context())
+		Where(site.HasUsersWith(user.IDEQ(currentUser.ID))).
+		First(c.Context())
 
 	if err != nil {
 		return err
 	}
 
-	visits, err := dbutil.Client.Visit.Query().Where(visit.HasSiteWith(site.IDEQ(siteInfo.ID))).All(c.Context())
+	visits, err := dbutil.Client.Visit.Query().
+		Where(visit.HasSiteWith(site.IDEQ(siteInfo.ID))).
+		Order(ent.Asc(visit.FieldTimestamp)).
+		All(c.Context())
 
 	if err != nil {
 		return err
